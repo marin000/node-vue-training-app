@@ -1,29 +1,21 @@
-const express = require("express");
-const app = express();
 const Item = require("../Models/Item");
-app.use(express.json())
 
-function create(req, res) {
-	console.log(req.body);
-	var newItem = Item(req.body);
-   newItem.save(function (err, data) {
-		if (err) {
-			res.status(400).send(err);
-		}
-		else {
-			res.status(201).send(data);
-		}
+async function create(req, res) {
+	try {
+		var newItem = Item(req.body);
+		newItem.save();
+		res.status(201).send(newItem);
+	} catch (error) {
+		res.status(400).send(error);
 	}
-	)
 }
 
-function fetch(req, res) {
-	Item.find({}, function (err, data) {
-		if (err) {
-			res.status(404).send(err);
-		} else {
-			res.json(data);
-		}
-	});
+async function fetch(req, res) {
+	try {
+		const data = await Item.find({});
+		await res.json(data);
+	} catch (error) {
+		res.status(404).send(error);
+	}
 }
 module.exports = { create, fetch }
