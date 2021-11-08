@@ -4,7 +4,7 @@
   "description": "",
   "main": "server/index.js",
   "scripts": {
-    "dev:server": "nodemon ./server/index.js",
+    "dev:server": "nodemon -r dotenv/config ./server/index.js",
     "dev:client": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
@@ -26,6 +26,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "core-js": "^3.6.5",
+    "dotenv": "^10.0.0",
     "mongoose": "^6.0.12",
     "vue": "^3.0.0"
   },

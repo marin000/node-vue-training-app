@@ -3,6 +3,6 @@ const Schema = mongoose.Schema;
 
 var ItemShema = new Schema({
     name: String,
-    createdAt: Date
+    createdAt: { type: Date, default: Date.now() }
 });
 module.exports = mongoose.model('Item', ItemShema);
