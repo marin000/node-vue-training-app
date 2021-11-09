@@ -31,7 +31,8 @@
     "dotenv": "^10.0.0",
     "moment": "^2.29.1",
     "mongoose": "^6.0.12",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.12"
   },
   "eslintConfig": {
     "root": true,
