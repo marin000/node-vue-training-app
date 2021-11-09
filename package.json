@@ -24,8 +24,10 @@
   },
   "private": true,
   "dependencies": {
+    "axios": "^0.24.0",
     "body-parser": "^1.19.0",
     "core-js": "^3.6.5",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "mongoose": "^6.0.12",
     "vue": "^3.0.0"
