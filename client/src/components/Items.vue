@@ -2,15 +2,15 @@
   <h1>Items</h1>
   <table>
     <thead>
-    <tr>
-      <th>Name</th>
-      <th>Created at</th>
-    </tr>
+      <tr>
+        <th>Name</th>
+        <th>Created at</th>
+      </tr>
     </thead>
     <tbody>
       <tr v-for="item in items" :key="item._id">
         <td>{{ item.name }}</td>
-        <td>{{ item.createdAt }}</td>
+        <td>{{ formatDate(item.createdAt) }}</td>
       </tr>
     </tbody>
   </table>
@@ -18,6 +18,7 @@
 
 <script>
 import axios from "axios";
+import moment from "moment";
 export default {
   data() {
     return {
@@ -29,6 +30,11 @@ export default {
       .get("/api/item")
       .then((result) => (this.items = result.data))
       .catch((err) => console.log(err.message));
+  },
+  methods: {
+    formatDate(value) {
+      return moment(value).format("ddd MMM DD, YYYY [at] HH:mm a");
+    },
   },
 };
 </script>
@@ -42,7 +48,8 @@ table {
   margin-right: auto;
 }
 
-td, th {
+td,
+th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
@@ -51,5 +58,4 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
-
 </style>
