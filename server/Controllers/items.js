@@ -2,7 +2,7 @@ const Item = require("../Models/Item");
 
 async function create(req, res) {
 	try {
-		var newItem = Item(req.body);
+    const newItem = Item(req.body);
 		newItem.save();
 		res.status(201).send(newItem);
 	} catch (error) {
