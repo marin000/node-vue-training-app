@@ -1,24 +1,30 @@
 <template>
   <h1>Items</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Created at</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in items" :key="item._id">
-        <td>{{ item.name }}</td>
-        <td>{{ formatDate(item.createdAt) }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div v-if="items.length">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Created at</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in items" :key="item._id">
+          <td>{{ item.name }}</td>
+          <td>{{ formatDate(item.createdAt) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div v-else>
+    <p>Loading items...</p>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
 import moment from "moment";
+
 export default {
   data() {
     return {
