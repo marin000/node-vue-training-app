@@ -38,8 +38,7 @@ export default {
     };
   },
   mounted() {
-    api
-      .getItems()
+    api.getItems()
       .then((result) => (this.items = result))
       .catch((err) => (this.err = err));
   },
