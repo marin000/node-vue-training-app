@@ -1,8 +1,7 @@
 import axios from "axios";
 
-async function getItems() {
-  return await axios.get("/api/item")
-    .then(result => result.data)
+function getItems() {
+  return axios.get("/api/item")
 }
 export default {
   getItems

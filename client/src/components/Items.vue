@@ -39,7 +39,7 @@ export default {
   },
   mounted() {
     api.getItems()
-      .then((result) => (this.items = result))
+      .then((result) => (this.items = result.data))
       .catch((err) => (this.err = err));
   },
   methods: {
