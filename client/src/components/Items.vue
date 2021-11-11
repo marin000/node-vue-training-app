@@ -1,41 +1,47 @@
 <template>
   <h1>Items</h1>
-  <div v-if="items.length">
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Created at</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in items" :key="item._id">
-          <td>{{ item.name }}</td>
-          <td>{{ formatDate(item.createdAt) }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div v-if="err">
+    {{ err }}
   </div>
   <div v-else>
-    <p>Loading items...</p>
+    <div v-if="items.length">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Created at</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in items" :key="item._id">
+            <td>{{ item.name }}</td>
+            <td>{{ formatDate(item.createdAt) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else>
+      <p>Loading items...</p>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import moment from "moment";
+import api from "../../api/items";
 
 export default {
   data() {
     return {
       items: [],
+      err: null,
     };
   },
   mounted() {
-    axios
-      .get("/api/item")
-      .then((result) => (this.items = result.data))
-      .catch((err) => console.log(err.message));
+    api
+      .getItems()
+      .then((result) => (this.items = result))
+      .catch((err) => (this.err = err));
   },
   methods: {
     formatDate(value) {
