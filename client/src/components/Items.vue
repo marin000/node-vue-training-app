@@ -1,24 +1,26 @@
 <template>
-  <h1>Items</h1>
+  <h1 class="display-2">Items</h1>
   <div v-if="err">
     {{ err }}
   </div>
   <div v-else>
     <div v-if="items.length">
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Created at</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in items" :key="item._id">
-            <td>{{ item.name }}</td>
-            <td>{{ formatDate(item.createdAt) }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="va-table-responsive">
+        <table class="va-table va-table--striped table-center">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Created at</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in items" :key="item._id">
+              <td>{{ item.name }}</td>
+              <td>{{ formatDate(item.createdAt) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div v-else>
       <p>Loading items...</p>
@@ -50,23 +52,18 @@ export default {
 };
 </script>
 
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 70%;
-  margin-left: auto;
-  margin-right: auto;
-}
+ <style>
+  .va-table-responsive {
+    overflow: auto;
+  }
 
-td,
-th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
+  .table-center {
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+  }
 
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
+  .display-2 {
+    margin-bottom: 20px;
+  }
 </style>
