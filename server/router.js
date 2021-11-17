@@ -12,6 +12,6 @@ router.delete('/employees/:id', employeesController.deleteEmployee)
 router.post('/employees/:id', employeesController.createTask)
 router.delete('/employees/:id/:taskId', employeesController.deleteTask)
 router.put('/employees/:id/:taskId', employeesController.updateTask)
-router.get('/employees/:id', employeesController.getOneEmployee)
+router.get('/employees/:id', employeesController.getEmployeeTasks)
 
 module.exports = router;
