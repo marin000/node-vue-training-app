@@ -60,7 +60,7 @@ async function updateTask(req, res) {
 
 async function getEmployeeTasks(req, res) {
   try {
-    const tasks = await Task.find({employee: req.params.id }).populate('employee');
+    const tasks = await Task.find({employee: req.params.id });
     res.json(tasks);
   } catch (error) {
     res.status(404).send(error);
