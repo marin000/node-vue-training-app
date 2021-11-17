@@ -6,12 +6,13 @@ var TasksShema = new mongoose.Schema({
     required: "Task must have a name!"
   },
   deadline: Date,
-  finished: Boolean,
+  completed: Boolean,
   employee: 
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Employees"
     }
-});
+}, { timestamps: true }
+);
 
 module.exports = mongoose.model('Tasks', TasksShema); 

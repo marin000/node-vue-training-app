@@ -11,6 +11,7 @@ var EmployeesShema = new mongoose.Schema({
       ref: "Tasks"
     }
   ]
-});
+}, {timestamps: true }
+);
 
 module.exports = mongoose.model('Employees', EmployeesShema); 
