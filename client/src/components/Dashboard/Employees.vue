@@ -1,16 +1,9 @@
 <template>
   <div class="va-table-responsive">
-    <table class="va-table va-table--striped employees-table">
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Action</th>
-      </tr>
-      </thead>
+    <table class="va-table">
       <tbody>
       <tr v-for="employee in employees" :key="employee._id">
         <td>{{employee.name}}</td>
-        <td><va-button @click="deleteHandler(employee._id)" size="small" color="danger" class="mr-4">Delete</va-button></td>
       </tr>
       </tbody>
     </table>
@@ -18,7 +11,7 @@
 </template>
 
 <script>
-import api from "../../../api/employees";
+import api from '../../../api/employees'
 
 export default {
   name: "Employees",
@@ -36,23 +29,11 @@ export default {
       api.getEmployees()
       .then((result) => (this.employees = result.data))
       .catch((err) => (this.err = err));
-    },
-
-    deleteHandler(id) {
-      api.deleteEmployee(id)
-      .then(() => { this.fetchEmployees(); })
-      .catch(err => console.log(err));
     }
   }
-};
+}
 </script>
 
 <style>
-.va-table-responsive {
-    overflow: auto;
-}
 
-.employees-table {
-  width: 100%;
-}
 </style>

@@ -1,0 +1,45 @@
+<template>
+    <form @submit.prevent="handleSubmit" class="employee-form">
+      <div class="employee-input">
+        <va-input
+          class="mb-4"
+          v-model="name"
+          label="name"
+        />
+      </div>
+      <div class="employee-button">
+        <va-button type="submit"> Add new user </va-button></div>
+    </form>
+</template>
+
+<script>
+import api from "../../../api/employees";
+export default {
+  name: 
+    "AddEmployeeForm",
+
+  data() {
+    return {
+      name: ''
+    }
+  },
+  methods: {
+    handleSubmit(){
+      api.addNewEmployee(this.name)
+      .then((result) => console.log(result))
+      .catch(err => console.log(err));
+    }
+  }
+}
+</script>
+
+<style>
+
+.employee-form {
+  display: flex;
+}
+
+.employee-input {
+  margin-right: 10px;
+}
+</style>
