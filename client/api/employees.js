@@ -1,7 +1,7 @@
 import axios from "axios";
 
 function getEmployees() {
-  return axios.get("/api/employees")
+  return axios.get('/api/employees')
 }
 
 function deleteEmployee(id) {
@@ -11,8 +11,13 @@ function deleteEmployee(id) {
 function addNewEmployee(name) {
   return axios.post('/api/employees', {name: name})
 }
+
+function getTasks(id) {
+  return axios.get(`/api/employees/${id}`)
+}
 export default {
   getEmployees,
   deleteEmployee,
-  addNewEmployee
+  addNewEmployee,
+  getTasks
 }

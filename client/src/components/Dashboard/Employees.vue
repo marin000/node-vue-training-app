@@ -1,12 +1,6 @@
 <template>
-  <div class="va-table-responsive">
-    <table class="va-table">
-      <tbody>
-      <tr v-for="employee in employees" :key="employee._id">
-        <td>{{employee.name}}</td>
-      </tr>
-      </tbody>
-    </table>
+  <div style="max-width: 300px;">
+    <va-select class="mb-4" label="Select employee" v-model="value" :options="employees" track-by="_id" />
   </div>
 </template>
 
@@ -19,6 +13,7 @@ export default {
     return {
       employees: [],
       err: null,
+      value: ''
     };
   },
   created() {
@@ -29,6 +24,9 @@ export default {
       api.getEmployees()
       .then((result) => (this.employees = result.data))
       .catch((err) => (this.err = err));
+    },
+    selectEmployee(id) {
+      this.$emit("employeeSelected",id);
     }
   }
 }

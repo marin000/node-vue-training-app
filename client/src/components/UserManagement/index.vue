@@ -1,6 +1,6 @@
 <template>
-  <div class="addEmployee"><AddEmployeeForm /></div>
-  <div class="employees"><Employees /></div>
+  <div class="addEmployee"><AddEmployeeForm @handleSubmit="refreshEmployees"/></div>
+  <div class="employees"><Employees :fetchEmployees="fetchEmployees" ref="refreshEmployees"/></div>
 </template>
 
 <script>
@@ -11,6 +11,11 @@ export default {
   components: {
     Employees,
     AddEmployeeForm
+  },
+  methods: {
+    refreshEmployees() {
+      this.$refs.refreshEmployees.fetchEmployees();
+    }
   }
 }
 </script>

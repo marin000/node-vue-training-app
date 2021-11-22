@@ -26,8 +26,9 @@ export default {
   methods: {
     handleSubmit(){
       api.addNewEmployee(this.name)
-      .then((result) => console.log(result))
+      .then(() => { this.$emit("handleSubmit"); })
       .catch(err => console.log(err));
+    this.name = '';
     }
   }
 }
