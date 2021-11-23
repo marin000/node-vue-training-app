@@ -53,6 +53,7 @@ import moment from 'moment';
 export default {
   name: "Task",
   props: ['employeeId'],
+  emits: ['taskDeleted', 'taskCompleted'],
   data() {
     return {
       tasks: [],
@@ -110,6 +111,6 @@ export default {
 }
 
 .tasks-info {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 </style>

@@ -8,7 +8,7 @@
     <div class="my-5">
       <va-divider />
     </div>
-    <Task :fetchTasks="fetchTasks" ref="getTasks"
+    <Task :fetchTasks="fetchTasks" ref="fetchTasks"
           :employeeId="employeeId"
           @taskDeleted="refreshTasks"
           @taskCompleted="refreshTasks" />
@@ -35,10 +35,10 @@ export default {
   methods: {
     getTasks(id) {
       this.employeeId = id;
-      this.$refs.getTasks.fetchTasks(this.employeeId);
+      this.$refs.fetchTasks.fetchTasks(this.employeeId);
     },
     refreshTasks() {
-      this.$refs.getTasks.fetchTasks(this.employeeId);
+      this.$refs.fetchTasks.fetchTasks(this.employeeId);
     }
   }
 }

@@ -21,6 +21,7 @@ export default {
   name: 
     "AddTaskForm",
   props: ['employeeId'],
+  emits: ['taskAdedd'],
 
   data() {
     return {

@@ -7,7 +7,7 @@
     :options="employees" 
     track-by="_id" 
     text-by="name"
-    @click="selectEmployee(value._id)" />
+    :input="selectEmployee(value._id)" />
   </div>
 </template>
 
@@ -16,6 +16,7 @@ import api from '../../../api/employees'
 
 export default {
   name: "Employee",
+  emits: ['employeeSelected'],
   data() {
     return {
       employees: [],
@@ -33,7 +34,9 @@ export default {
       .catch((err) => (this.err = err));
     },
     selectEmployee(id) {
-      this.$emit("employeeSelected",id);
+      if (id) {
+       this.$emit("employeeSelected",id); 
+      }
     }
   }
 }
