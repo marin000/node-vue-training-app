@@ -16,10 +16,11 @@
 </template>
 
 <script>
-//import api from "../../../api/employees";
+import api from "../../../api/employees";
 export default {
   name: 
     "AddTaskForm",
+  props: ['employeeId'],
 
   data() {
     return {
@@ -29,7 +30,9 @@ export default {
   },
   methods: {
     handleSubmit(){
-      return;
+      api.createTask(this.$props.employeeId, this.task, this.taskDate)
+        .then(() => { this.$emit("taskAdded"); })
+        .catch(err => console.log(err))
     }
   }
 }
@@ -41,10 +44,11 @@ export default {
 }
 
 .task-input {
-  margin-right: 10px;
+  margin-right: 20px;
+  width: 40%;
 }
 
 .task-date {
-  margin-right: 10px;
+  margin-right: 20px;
 }
 </style>

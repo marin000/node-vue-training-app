@@ -1,6 +1,13 @@
 <template>
   <div style="max-width: 300px;">
-    <va-select class="mb-4" label="Select employee" v-model="value" :options="employees" track-by="_id" />
+    <va-select 
+    class="mb-4" 
+    label="Select employee" 
+    v-model="value" 
+    :options="employees" 
+    track-by="_id" 
+    text-by="name"
+    @click="selectEmployee(value._id)" />
   </div>
 </template>
 
@@ -8,13 +15,13 @@
 import api from '../../../api/employees'
 
 export default {
-  name: "Employees",
+  name: "Employee",
   data() {
     return {
       employees: [],
       err: null,
       value: ''
-    };
+    }
   },
   created() {
     this.fetchEmployees();

@@ -21,7 +21,7 @@
 import api from "../../../api/employees";
 
 export default {
-  name: "Employees",
+  name: "Employee",
   data() {
     return {
       employees: [],
@@ -48,11 +48,14 @@ export default {
 </script>
 
 <style>
+.employees-table {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .va-table-responsive {
     overflow: auto;
 }
 
-.employees-table {
-  width: 100%;
-}
 </style>

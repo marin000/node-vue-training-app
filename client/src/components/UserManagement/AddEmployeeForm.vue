@@ -38,9 +38,11 @@ export default {
 
 .employee-form {
   display: flex;
+  justify-content: center;
 }
 
 .employee-input {
   margin-right: 10px;
+  width: 30%;
 }
 </style>

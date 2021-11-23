@@ -1,36 +1,63 @@
 <template>
-  <div class="employees"><Employees @employeeSelected="getTasks"/></div>
-  <div class="addTask"><AddTaskForm /></div>
-  <div class="tasks"><Tasks :fetchTasks="fetchTasks" ref="getTasks"/></div>
+  <div class="dashboard-employees"><Employee @employeeSelected="getTasks"/></div>
+  <div class="addTask">
+    <AddTaskForm :employeeId="employeeId" 
+                  @taskAdded="refreshTasks"/>
+  </div>
+  <div class="tasks">
+    <div class="my-5">
+      <va-divider />
+    </div>
+    <Task :fetchTasks="fetchTasks" ref="getTasks"
+          :employeeId="employeeId"
+          @taskDeleted="refreshTasks"
+          @taskCompleted="refreshTasks" />
+  </div>
 </template>
 
 <script>
-import Employees from './Employees.vue'
+import Employee from './Employee.vue'
 import AddTaskForm from './AddTaskForm.vue'
-import Tasks from './Tasks.vue'
+import Task from './Task.vue'
 
 export default {
   components: {
-    Employees,
+    Employee,
     AddTaskForm,
-    Tasks
+    Task
   },
+  data() {
+    return {
+      employeeId: ''
+    }
+  },
+
   methods: {
     getTasks(id) {
-      this.$refs.getTasks.fetchTasks(id);
+      this.employeeId = id;
+      this.$refs.getTasks.fetchTasks(this.employeeId);
+    },
+    refreshTasks() {
+      this.$refs.getTasks.fetchTasks(this.employeeId);
     }
   }
 }
 </script>
 
 <style>
-.employees {
+.dashboard-employees {
   float: left;
-  width: 20%;
+  margin-right: 30px;
+  margin-left: 20px;
 }
 
 .addTask {
   float: left;
-  width: 70%;
 }
+
+.tasks {
+  clear: both;
+}
+
+
 </style>
