@@ -4,7 +4,14 @@
     </va-inner-loading>
   </div>
   <div v-else>
-    <div class="va-table-responsive">
+    <va-data-table :items="tasks" :columns="columns" class="tasks-table"> 
+      <template #header(name)>Task</template>
+
+      <template #cell(deadline)="{source: deadline}"> {{ formatDate(deadline) }}</template>
+      <template #cell(completed)="{source: completed}"><va-checkbox v-model="completed" /></template>
+      <template #cell(employee)="{source: _id}"><va-button @click="deleteTask(_id)" size="small" color="danger" class="mr-4" :disabled="isExpired(deadline)">Delete</va-button></template>
+    </va-data-table>
+    <!--<div class="va-table-responsive">
       <table class="va-table va-table--striped tasks-table">
         <thead>
         <tr>
@@ -18,30 +25,24 @@
         <tr v-for="task in tasks" :key="task._id">
           <td>{{ task.name }}</td>
           <td>{{ formatDate(task.deadline) }}</td>
-          <td v-if="checkDate(task.deadline)">
-            <input type="checkbox" :value="task._id" id="task._id" v-model="task.completed" @change="checkTask($event)">
+          <td >
+            <input type="checkbox" :value="task._id" id="task._id" v-model="task.completed" @change="setTaskCompletion(task)" :disabled="isExpired(task.deadline)">
           </td>
-          <td v-else>
-            <input type="checkbox" :value="task._id" id="task._id" v-model="task.completed" @change="checkTask($event)" disabled>
-          </td>
-          <td v-if="checkDate(task.deadline)">
-            <va-button @click="deleteHandler(task._id)" size="small" color="danger" class="mr-4">Delete</va-button>
-          </td>
-          <td v-else>
-            <va-button @click="deleteHandler(task._id)" size="small" color="danger" class="mr-4" disabled>Delete</va-button>
+          <td>
+            <va-button @click="deleteTask(task._id)" size="small" color="danger" class="mr-4" :disabled="isExpired(task.deadline)">Delete</va-button>
           </td>
         </tr>
         </tbody>
-      </table>
+      </table>-->
     </div>
   </div>
   <br><br>
   <div class="tasks-info" v-if="tasks.length">
-    <p v-if="tasks.length === numTasksCompleted(tasks)" style="color: green">
-      {{ numTasksCompleted(tasks) }} out of {{ tasks.length }} tasks completed.
+    <p v-if="tasks.length === completedTasksCount.length" style="color: green">
+      {{ completedTasksCount.length }} out of {{ tasks.length }} tasks completed.
     </p>
     <p v-else style="color: orange">
-      {{ numTasksCompleted(tasks) }} out of {{ tasks.length }} tasks completed.
+      {{ completedTasksCount.length }} out of {{ tasks.length }} tasks completed.
     </p>
   </div>
 </template>
@@ -55,10 +56,17 @@ export default {
   props: ['employeeId'],
   emits: ['taskDeleted', 'taskCompleted'],
   data() {
+    const columns = [
+      { key: 'name' },
+      { key: 'deadline' },
+      { key: 'completed' },
+      { key: 'employee' }
+    ]
     return {
       tasks: [],
       err: null,
       isLoading: false,
+      columns
     }
   },
 
@@ -73,22 +81,22 @@ export default {
     formatDate(value) {
       return moment(value).format("DD-MM-YYYY");
     },
-    deleteHandler(taskId) {
+    deleteTask(taskId) {
       api.deleteTask(this.$props.employeeId, taskId)
       .then(() => { this.$emit("taskDeleted"); })
       .catch(err => console.log(err))
     },
-    checkTask(e) {
-      api.updateTask(this.$props.employeeId, e.srcElement.value, e.srcElement._modelValue)
+    setTaskCompletion(task) {
+      api.updateTask(this.$props.employeeId, task._id, task.completed)
       .then(() => { this.$emit("taskCompleted"); })
       .catch(err => console.log(err))
     },
-    checkDate(deadline) {
+    isExpired(deadline) {
       const current = moment().toDate();
       if (this.formatDate(current) > this.formatDate(deadline)) {
-        return false;
+        return true;
       }
-      return true;
+      return false;
     },
     numTasksCompleted(tasks) {
       var br = 0;
@@ -99,13 +107,19 @@ export default {
       });
       return br;
     }
+  },
+  computed: {
+    completedTasksCount() {
+      return this.tasks.filter(task => task.completed === true);
+    }
   }
 }
 </script>
 
 <style>
+
 .tasks-table {
-  width: 60%;
+  width: 60% !important;
   margin-left: auto;
   margin-right: auto;
 }

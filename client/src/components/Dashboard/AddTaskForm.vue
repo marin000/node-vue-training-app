@@ -1,11 +1,12 @@
 <template>
-    <form @submit.prevent="handleSubmit" class="task-form">
+    <form @submit.prevent="addTask" class="task-form">
       <div class="task-input">
         <va-input
           class="mb-4"
           v-model="task"
           label="Task name"
         />
+        <div class="input-error" v-if="taskNameError">{{ taskNameError }}</div>
       </div>
       <div class="task-date">
         <va-date-input v-model="taskDate" />
@@ -18,22 +19,26 @@
 <script>
 import api from "../../../api/employees";
 export default {
-  name: 
-    "AddTaskForm",
+  name: "AddTaskForm",
   props: ['employeeId'],
   emits: ['taskAdded'],
 
   data() {
     return {
       task: '',
-      taskDate: new Date()
+      taskDate: new Date(),
+      taskNameError: ''
     }
   },
   methods: {
-    handleSubmit(){
-      api.createTask(this.$props.employeeId, this.task, this.taskDate)
-        .then(() => { this.$emit("taskAdded"); })
-        .catch(err => console.log(err))
+    addTask(){
+      this.taskNameError = this.task.length ? '' : 'Please input task name!';
+
+      if(!this.taskNameError) {
+        api.createTask(this.$props.employeeId, this.task, this.taskDate)
+          .then(() => { this.$emit("taskAdded"); })
+          .catch(err => console.log(err))
+      }
     }
   }
 }
@@ -51,5 +56,10 @@ export default {
 
 .task-date {
   margin-right: 20px;
+}
+
+.input-error {
+  color: red;
+  font-weight: bold;
 }
 </style>

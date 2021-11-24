@@ -10,7 +10,7 @@
       <tbody>
       <tr v-for="employee in employees" :key="employee._id">
         <td>{{employee.name}}</td>
-        <td><va-button @click="deleteHandler(employee._id)" size="small" color="danger" class="mr-4">Delete</va-button></td>
+        <td><va-button @click="deleteEmployee(employee._id)" size="small" color="danger" class="mr-4">Delete</va-button></td>
       </tr>
       </tbody>
     </table>
@@ -38,7 +38,7 @@ export default {
       .catch((err) => (this.err = err));
     },
 
-    deleteHandler(id) {
+    deleteEmployee(id) {
       api.deleteEmployee(id)
       .then(() => { this.fetchEmployees(); })
       .catch(err => console.log(err));

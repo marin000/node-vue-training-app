@@ -31,6 +31,7 @@ export default {
     fetchEmployees() {
       api.getEmployees()
       .then((result) => (this.employees = result.data))
+      .then(() => this.value = this.employees[0])
       .catch((err) => (this.err = err));
     },
     selectEmployee(id) {

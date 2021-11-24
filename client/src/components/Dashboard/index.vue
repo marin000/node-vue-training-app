@@ -1,14 +1,12 @@
 <template>
-  <div class="dashboard-employees"><Employee @employeeSelected="getTasks"/></div>
-  <div class="addTask">
-    <AddTaskForm :employeeId="employeeId" 
-                  @taskAdded="refreshTasks"/>
-  </div>
+  <Employee class="dashboard-employees" @employeeSelected="getTasks"/>
+  <AddTaskForm class="addTask" :employeeId="employeeId" 
+              @taskAdded="refreshTasks"/>
   <div class="tasks">
     <div class="my-5">
       <va-divider />
     </div>
-    <Task ref="updateTasks"
+    <Task ref="Task"
           :employeeId="employeeId"
           @taskDeleted="refreshTasks"
           @taskCompleted="refreshTasks" />
@@ -35,10 +33,10 @@ export default {
   methods: {
     getTasks(id) {
       this.employeeId = id;
-      this.$refs.updateTasks.fetchTasks(this.employeeId);
+      this.$refs.Task.fetchTasks(this.employeeId);
     },
     refreshTasks() {
-      this.$refs.updateTasks.fetchTasks(this.employeeId);
+      this.$refs.Task.fetchTasks(this.employeeId);
     }
   }
 }

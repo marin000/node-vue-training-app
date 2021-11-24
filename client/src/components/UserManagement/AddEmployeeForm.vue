@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="handleSubmit" class="employee-form">
+    <form @submit.prevent="addEmployee" class="employee-form">
       <div class="employee-input">
         <va-input
           class="mb-4"
@@ -15,8 +15,8 @@
 <script>
 import api from "../../../api/employees";
 export default {
-  name: 
-    "AddEmployeeForm",
+  name: "AddEmployeeForm",
+  emits: ['employeeAdded'],
 
   data() {
     return {
@@ -24,9 +24,9 @@ export default {
     }
   },
   methods: {
-    handleSubmit(){
+    addEmployee(){
       api.addNewEmployee(this.name)
-      .then(() => { this.$emit("handleSubmit"); })
+      .then(() => { this.$emit("employeeAdded"); })
       .catch(err => console.log(err));
     this.name = '';
     }
