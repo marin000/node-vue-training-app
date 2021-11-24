@@ -4,14 +4,7 @@
     </va-inner-loading>
   </div>
   <div v-else>
-    <va-data-table :items="tasks" :columns="columns" class="tasks-table"> 
-      <template #header(name)>Task</template>
-
-      <template #cell(deadline)="{source: deadline}"> {{ formatDate(deadline) }}</template>
-      <template #cell(completed)="{source: completed}"><va-checkbox v-model="completed" /></template>
-      <template #cell(employee)="{source: _id}"><va-button @click="deleteTask(_id)" size="small" color="danger" class="mr-4" :disabled="isExpired(deadline)">Delete</va-button></template>
-    </va-data-table>
-    <!--<div class="va-table-responsive">
+    <div class="va-table-responsive">
       <table class="va-table va-table--striped tasks-table">
         <thead>
         <tr>
@@ -33,16 +26,16 @@
           </td>
         </tr>
         </tbody>
-      </table>-->
+      </table>
     </div>
   </div>
   <br><br>
   <div class="tasks-info" v-if="tasks.length">
-    <p v-if="tasks.length === completedTasksCount.length" style="color: green">
-      {{ completedTasksCount.length }} out of {{ tasks.length }} tasks completed.
+    <p v-if="tasks.length === completedTasks.length" style="color: green">
+      {{ completedTasks.length }} out of {{ tasks.length }} tasks completed.
     </p>
     <p v-else style="color: orange">
-      {{ completedTasksCount.length }} out of {{ tasks.length }} tasks completed.
+      {{ completedTasks.length }} out of {{ tasks.length }} tasks completed.
     </p>
   </div>
 </template>
@@ -56,17 +49,10 @@ export default {
   props: ['employeeId'],
   emits: ['taskDeleted', 'taskCompleted'],
   data() {
-    const columns = [
-      { key: 'name' },
-      { key: 'deadline' },
-      { key: 'completed' },
-      { key: 'employee' }
-    ]
     return {
       tasks: [],
       err: null,
-      isLoading: false,
-      columns
+      isLoading: false
     }
   },
 
@@ -92,24 +78,11 @@ export default {
       .catch(err => console.log(err))
     },
     isExpired(deadline) {
-      const current = moment().toDate();
-      if (this.formatDate(current) > this.formatDate(deadline)) {
-        return true;
-      }
-      return false;
-    },
-    numTasksCompleted(tasks) {
-      var br = 0;
-      tasks.forEach(task => {
-        if (task.completed) {
-          br++;
-        }
-      });
-      return br;
+      return this.formatDate(moment().toDate()) > this.formatDate(deadline);
     }
   },
   computed: {
-    completedTasksCount() {
+    completedTasks() {
       return this.tasks.filter(task => task.completed === true);
     }
   }
