@@ -11,7 +11,7 @@ function deleteEmployee(id) {
 }
 
 function addNewEmployee(name) {
-  return axios.post(url, {name: name})
+  return axios.post(url, { name: name })
 }
 
 function getTasks(id) {
@@ -19,7 +19,7 @@ function getTasks(id) {
 }
 
 function createTask(id, task, taskDate) {
-  return axios.post(`${url}/${id}`, { name: task, deadline: taskDate, completed: false})
+  return axios.post(`${url}/${id}`, { name: task, deadline: taskDate, completed: false })
 }
 
 function deleteTask(employeeId, taskId) {
