@@ -10,23 +10,23 @@ function deleteEmployee(id) {
   return axios.delete(`${url}/${id}`)
 }
 
-function addNewEmployee(name) {
-  return axios.post(url, { name: name })
+function addNewEmployee(employee) {
+  return axios.post(url, employee)
 }
 
 function getTasks(id) {
   return axios.get(`${url}/${id}`)
 }
 
-function createTask(id, task, taskDate) {
-  return axios.post(`${url}/${id}`, { name: task, deadline: taskDate, completed: false })
+function createTask(id, task) {
+  return axios.post(`${url}/${id}`, task)
 }
 
 function deleteTask(employeeId, taskId) {
   return axios.delete(`${url}/${employeeId}/${taskId}`)
 }
 
-function updateTask(employeeId, taskId, completed) {
+function setCompletion(employeeId, taskId, completed) {
   return axios.put(`${url}/${employeeId}/${taskId}`, { completed: completed })
 }
 
@@ -37,5 +37,5 @@ export default {
   getTasks,
   createTask,
   deleteTask,
-  updateTask
+  setCompletion
 }

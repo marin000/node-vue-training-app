@@ -81,14 +81,14 @@ export default {
       return moment(value).format("DD-MM-YYYY");
     },
     deleteTask(taskId) {
-      api.deleteTask(this.$props.employeeId, taskId)
+      api.deleteTask(this.employeeId, taskId)
         .then(() => {
           this.$emit("taskDeleted");
         })
         .catch((err) => console.log(err));
     },
     setTaskCompletion(task) {
-      api.updateTask(this.$props.employeeId, task._id, task.completed)
+      api.setCompletion(this.employeeId, task._id, task.completed)
         .then(() => {
           this.$emit("taskCompleted");
         })

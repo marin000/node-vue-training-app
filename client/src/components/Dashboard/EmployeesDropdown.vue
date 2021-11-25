@@ -15,7 +15,7 @@
 import api from '../../../api/employees'
 
 export default {
-  name: "Employee",
+  name: "EmployeesDropdown",
   emits: ['employeeSelected'],
   data() {
     return {

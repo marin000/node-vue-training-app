@@ -1,6 +1,6 @@
 <template>
-  <AddEmployeeForm class="addEmployee" @employeeAdded="refreshEmployees"/>
-  <Employee ref="Employee"/>
+  <add-employee-form class="addEmployee" @employeeAdded="refreshEmployees"/>
+  <employee ref="employee"/>
 </template>
 
 <script>
@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     refreshEmployees() {
-      this.$refs.Employee.fetchEmployees();
+      this.$refs.employee.fetchEmployees();
     }
   }
 }

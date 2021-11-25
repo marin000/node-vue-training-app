@@ -22,8 +22,8 @@ async function fetch(req, res) {
 
 async function deleteEmployee(req, res) {
   try {
-    await Employee.findByIdAndDelete(req.params.id);
     await Task.deleteMany({ employee: req.params.id });
+    await Employee.findByIdAndDelete(req.params.id);
     res.status(200).send("Employee deleted successfully");
   } catch (error) {
     res.status(404).send(error);
@@ -52,7 +52,8 @@ async function deleteTask(req, res) {
 
 async function updateTask(req, res) {
   try {
-    await Task.findByIdAndUpdate(req.params.taskId, { completed: req.body.completed });
+    const taskComplete = req.body.completed;
+    await Task.findByIdAndUpdate(req.params.taskId, { completed: taskComplete });
     res.status(200).send("Task updated successfully.");
   } catch (error) {
     res.status(404).send(error);

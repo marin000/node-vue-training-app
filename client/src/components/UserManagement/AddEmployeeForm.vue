@@ -25,7 +25,8 @@ export default {
   },
   methods: {
     addEmployee(){
-      api.addNewEmployee(this.name)
+      const employee = { "name": this.name };
+      api.addNewEmployee(employee)
       .then(() => { this.$emit("employeeAdded"); })
       .catch(err => console.log(err));
     this.name = '';

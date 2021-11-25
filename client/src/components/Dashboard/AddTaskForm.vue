@@ -6,7 +6,7 @@
           v-model="task"
           label="Task name"
         />
-        <div class="input-error" v-if="taskNameError">{{ taskNameError }}</div>
+        <div class="input-error" v-if="error">{{ error }}</div>
       </div>
       <div class="task-date">
         <va-date-input v-model="taskDate" />
@@ -27,18 +27,21 @@ export default {
     return {
       task: '',
       taskDate: new Date(),
-      taskNameError: ''
+      error: ''
     }
   },
   methods: {
     addTask(){
-      this.taskNameError = this.task.length ? '' : 'Please input task name!';
+      this.error = this.task.length ? '' : 'Please input task name!';
 
-      if(!this.taskNameError) {
-        api.createTask(this.$props.employeeId, this.task, this.taskDate)
+      if(!this.error) {
+        const task = { name: this.task, deadline: this.taskDate, completed: false};
+        api.createTask(this.employeeId, task)
           .then(() => { this.$emit("taskAdded"); })
           .catch(err => console.log(err))
       }
+      this.task = '';
+      this.taskDate = new Date();
     }
   }
 }
