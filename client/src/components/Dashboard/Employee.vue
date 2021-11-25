@@ -1,13 +1,13 @@
 <template>
   <div style="max-width: 300px;">
     <va-select 
-    class="mb-4" 
-    label="Select employee" 
-    v-model="value" 
-    :options="employees" 
-    track-by="_id" 
-    text-by="name"
-    :input="selectEmployee(value._id)" />
+      @update:modelValue="emitEmployeeSelected($event)"
+      v-model="value" 
+      :options="employees" 
+      class="mb-4" 
+      label="Select employee" 
+      track-by="_id" 
+      text-by="name" />
   </div>
 </template>
 
@@ -31,13 +31,15 @@ export default {
     fetchEmployees() {
       api.getEmployees()
       .then((result) => (this.employees = result.data))
-      .then(() => this.value = this.employees[0])
+      .then(() => { this.selectEmployee(this.employees[0])})
       .catch((err) => (this.err = err));
     },
-    selectEmployee(id) {
-      if (id) {
-       this.$emit("employeeSelected",id); 
-      }
+    selectEmployee(employee) {
+      this.value = employee;
+      this.emitEmployeeSelected(employee)
+    },
+    emitEmployeeSelected(employee) {
+      this.$emit("employeeSelected", employee._id); 
     }
   }
 }
