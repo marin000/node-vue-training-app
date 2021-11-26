@@ -24,7 +24,7 @@ async function deleteEmployee(req, res) {
   try {
     await Task.deleteMany({ employee: req.params.id });
     await Employee.findByIdAndDelete(req.params.id);
-    res.status(200).send("Employee deleted successfully");
+    res.status(204).send("Employee deleted successfully");
   } catch (error) {
     res.status(404).send(error);
   }
@@ -44,7 +44,7 @@ async function createTask(req, res) {
 async function deleteTask(req, res) {
   try {
     await Task.findByIdAndDelete(req.params.taskId);
-    res.status(200).send("Task deleted successfully.");
+    res.status(204).send("Task deleted successfully.");
   } catch (error) {
     res.status(404).send(error);
   }
@@ -54,9 +54,9 @@ async function updateTask(req, res) {
   try {
     const taskComplete = req.body.completed;
     await Task.findByIdAndUpdate(req.params.taskId, { completed: taskComplete });
-    res.status(200).send("Task updated successfully.");
+    res.status(204).send("Task updated successfully.");
   } catch (error) {
-    res.status(404).send(error);
+    res.status(400).send(error);
   }
 }
 

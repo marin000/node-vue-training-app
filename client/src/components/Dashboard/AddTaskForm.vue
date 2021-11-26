@@ -38,7 +38,7 @@ export default {
         const task = { name: this.task, deadline: this.taskDate, completed: false};
         api.createTask(this.employeeId, task)
           .then(() => { this.$emit("taskAdded"); })
-          .catch(err => console.log(err))
+          .catch(err => console.log(err));
       }
       this.task = '';
       this.taskDate = new Date();

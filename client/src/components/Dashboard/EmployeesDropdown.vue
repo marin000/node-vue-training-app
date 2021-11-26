@@ -36,7 +36,7 @@ export default {
     },
     selectEmployee(employee) {
       this.value = employee;
-      this.emitEmployeeSelected(employee)
+      this.emitEmployeeSelected(employee);
     },
     emitEmployeeSelected(employee) {
       this.$emit("employeeSelected", employee._id); 
