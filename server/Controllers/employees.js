@@ -6,7 +6,7 @@ async function create(req, res, next) {
   try {
     const errors = validationResult(req); 
     if (!errors.isEmpty()) {
-      res.status(422).json({ errors: errors.array() });
+      res.status(400).json({ errors: errors.array() });
       return;
     }
     const newEmployee = Employee(req.body);
@@ -36,14 +36,19 @@ async function deleteEmployee(req, res) {
   }
 }
 
-async function createTask(req, res) {
+async function createTask(req, res, next) {
   try {
+    const errors = validationResult(req); 
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
     const newTask = Task(req.body);
     newTask.employee = req.params.id;
     await newTask.save();
     res.status(201).send(newTask);
   } catch (error) {
-    res.status(400).send(error);
+    return next(error);
   }
 }
 
