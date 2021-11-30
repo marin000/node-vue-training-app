@@ -2,33 +2,21 @@ import axios from "axios";
 
 const url = '/api/employees';
 
-function getEmployees() {
-  return axios.get(url);
-}
+const getEmployees = () => axios.get(url);
 
-function deleteEmployee(id) {
-  return axios.delete(`${url}/${id}`);
-}
+const deleteEmployee = (id) => axios.delete(`${url}/${id}`);
 
-function addNewEmployee(employee) {
-  return axios.post(url, employee);
-}
+const addNewEmployee = (employee) => axios.post(url, employee);
 
-function getTasks(id) {
-  return axios.get(`${url}/${id}`);
-}
+const getTasks = (id) => axios.get(`${url}/${id}`);
 
-function createTask(id, task) {
-  return axios.post(`${url}/${id}`, task);
-}
+const createTask = (id, task) => axios.post(`${url}/${id}`, task);
 
-function deleteTask(employeeId, taskId) {
-  return axios.delete(`${url}/${employeeId}/${taskId}`);
-}
+const deleteTask = (employeeId, taskId) => 
+  axios.delete(`${url}/${employeeId}/${taskId}`);
 
-function setCompletion(employeeId, taskId, completed) {
-  return axios.put(`${url}/${employeeId}/${taskId}`, { completed: completed });
-}
+const setCompletion = (employeeId, taskId, completed) => 
+  axios.put(`${url}/${employeeId}/${taskId}`, { completed: completed });
 
 export default {
   getEmployees,

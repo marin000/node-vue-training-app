@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+          "@models/*": [
+              "./server/Models/*"
+          ],
+          "@colors/*": [
+              "./utils/colors/*"
+          ],
+          "@datetime/*": [
+              "./utils/datetime/*"
+          ]
+      }
+  }
+}

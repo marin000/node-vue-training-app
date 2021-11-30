@@ -109,8 +109,7 @@ export default {
 <style>
 .tasks-table {
   width: 60% !important;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
 }
 
 .tasks-info {

@@ -60,8 +60,7 @@ export default {
 <style>
 .employees-table {
   width: 70%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
 }
 
 .va-table-responsive {
