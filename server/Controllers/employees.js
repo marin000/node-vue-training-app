@@ -28,6 +28,11 @@ async function fetch(req, res) {
 
 async function deleteEmployee(req, res) {
   try {
+    const errors = validationResult(req); 
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
     await Task.deleteMany({ employee: req.params.id });
     await Employee.findByIdAndDelete(req.params.id);
     res.status(204).send("Employee deleted successfully");

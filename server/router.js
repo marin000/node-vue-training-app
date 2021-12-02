@@ -1,7 +1,7 @@
 const express = require("express");
 const itemController = require('./Controllers/items');
 const employeesController = require('./Controllers/employees');
-const employeesValidator = require('./Controllers/employeesValidator');
+const employeesValidator = require('./validators/employeesValidator');
 const router = express.Router();
 
 router.get('/item', itemController.fetch)
@@ -13,7 +13,10 @@ router.post(
   employeesController.create);
 
 router.get('/employees', employeesController.fetch);
-router.delete('/employees/:id', employeesController.deleteEmployee);
+router.delete(
+  '/employees/:id', 
+  employeesValidator.validate('deleteEmployee'),
+  employeesController.deleteEmployee);
 
 router.post(
   '/employees/:id', 

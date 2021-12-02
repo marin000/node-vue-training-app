@@ -6,7 +6,7 @@
           v-model="task"
           label="Task name"
         />
-        <div class="input-error" v-if="error">{{ error }}</div>
+        <div class="input-task-error" v-if="error">{{ error }}</div>
       </div>
       <div class="task-date">
         <va-date-input v-model="taskDate" />
@@ -18,6 +18,7 @@
 
 <script>
 import api from "../../../api/employees";
+import moment from 'moment';
 export default {
   name: "AddTaskForm",
   props: ['employeeId'],
@@ -35,7 +36,10 @@ export default {
       this.error = this.task.length ? '' : 'Please input task name!';
 
       if(!this.error) {
-        const task = { name: this.task, deadline: this.taskDate, completed: false};
+        const task = { 
+          name: this.task, 
+          deadline: moment(this.taskDate).format('YYYY-MM-DD'), 
+          completed: false};
         api.createTask(this.employeeId, task)
           .then(() => { this.$emit("taskAdded"); })
           .catch(err => console.log(err));
@@ -61,7 +65,7 @@ export default {
   margin-right: 20px;
 }
 
-.input-error {
+.input-task-error {
   color: red;
   font-weight: bold;
 }

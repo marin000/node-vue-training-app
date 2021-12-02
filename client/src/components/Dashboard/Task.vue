@@ -16,7 +16,7 @@
         <tbody>
           <tr v-for="task in tasks" :key="task._id">
             <td>{{ task.name }}</td>
-            <td>{{ formatDate(task.deadline) }}</td>
+            <td>{{ task.deadline }}</td>
             <td>
               <input
                 type="checkbox"
@@ -78,7 +78,7 @@ export default {
         .catch((err) => (this.err = err));
     },
     formatDate(value) {
-      return moment(value).format("DD-MM-YYYY");
+      return moment(value).format("YYYY-MM-DD");
     },
     deleteTask(taskId) {
       api.deleteTask(this.employeeId, taskId)
@@ -95,7 +95,8 @@ export default {
         .catch((err) => console.log(err));
     },
     isExpired(deadline) {
-      return this.formatDate(moment().toDate()) > this.formatDate(deadline);
+      const today = moment().format('YYYY-MM-DD');
+      return moment(today).isAfter(deadline);
     },
   },
   computed: {

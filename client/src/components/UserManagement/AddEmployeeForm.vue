@@ -6,6 +6,7 @@
           v-model="name"
           label="name"
         />
+        <div class="input-employee-error" v-if="error">{{ error }}</div>
       </div>
       <div class="employee-button">
         <va-button type="submit"> Add new user </va-button></div>
@@ -20,15 +21,19 @@ export default {
 
   data() {
     return {
-      name: ''
+      name: '',
+      error: ''
     }
   },
   methods: {
     addEmployee(){
-      const employee = { "name": this.name };
-      api.addNewEmployee(employee)
-      .then(() => { this.$emit("employeeAdded"); })
-      .catch(err => console.log(err));
+      this.error = this.name.length ? '' : 'Please input employee name!';
+      if(!this.error) {
+        const employee = { "name": this.name };
+        api.addNewEmployee(employee)
+        .then(() => { this.$emit("employeeAdded"); })
+        .catch(err => console.log(err));
+      }
     this.name = '';
     }
   }
@@ -45,5 +50,10 @@ export default {
 .employee-input {
   margin-right: 10px;
   width: 30%;
+}
+
+.input-employee-error {
+  color: red;
+  font-weight: bold;
 }
 </style>

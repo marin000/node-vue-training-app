@@ -5,7 +5,7 @@ var TasksShema = new mongoose.Schema({
     type: String,
     required: "Task must have a name!"
   },
-  deadline: Date,
+  deadline: String,
   completed: Boolean,
   employee: 
     {

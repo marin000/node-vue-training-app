@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       employees: [],
-      err: null,
+
     };
   },
   created() {
@@ -43,15 +43,13 @@ export default {
     fetchEmployees() {
       api.getEmployees()
         .then((result) => (this.employees = result.data))
-        .catch((err) => (this.err = err));
+        .catch((err) => (console.log(err)));
     },
 
     deleteEmployee(id) {
       api.deleteEmployee(id)
-        .then(() => {
-          this.fetchEmployees();
-        })
-        .catch((err) => console.log(err));
+        .then(() => { this.fetchEmployees();})
+        .catch((err) => (console.log(err)));
     },
   },
 };
