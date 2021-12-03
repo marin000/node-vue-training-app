@@ -59,6 +59,11 @@ async function createTask(req, res, next) {
 
 async function deleteTask(req, res) {
   try {
+    const errors = validationResult(req); 
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
     await Task.findByIdAndDelete(req.params.taskId);
     res.status(204).send("Task deleted successfully.");
   } catch (error) {
@@ -68,6 +73,11 @@ async function deleteTask(req, res) {
 
 async function updateTask(req, res) {
   try {
+    const errors = validationResult(req); 
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
     const taskComplete = req.body.completed;
     await Task.findByIdAndUpdate(req.params.taskId, { completed: taskComplete });
     res.status(204).send("Task updated successfully.");
@@ -78,6 +88,11 @@ async function updateTask(req, res) {
 
 async function getEmployeeTasks(req, res) {
   try {
+    const errors = validationResult(req); 
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
     const tasks = await Task.find({ employee: req.params.id });
     res.json(tasks);
   } catch (error) {

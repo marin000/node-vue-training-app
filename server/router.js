@@ -23,8 +23,19 @@ router.post(
   employeesValidator.validate('createTask'),
   employeesController.createTask);
 
-router.delete('/employees/:id/:taskId', employeesController.deleteTask);
-router.put('/employees/:id/:taskId', employeesController.updateTask);
-router.get('/employees/:id', employeesController.getEmployeeTasks);
+router.delete(
+  '/employees/:id/:taskId', 
+  employeesValidator.validate('deleteTask'),
+  employeesController.deleteTask);
+
+router.put(
+  '/employees/:id/:taskId', 
+  employeesValidator.validate('updateTask'),
+  employeesController.updateTask);
+
+router.get(
+  '/employees/:id', 
+  employeesValidator.validate('getEmployeeTasks'),
+  employeesController.getEmployeeTasks);
 
 module.exports = router;
