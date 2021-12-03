@@ -15,7 +15,7 @@ router.post(
 router.get('/employees', employeesController.fetch);
 router.delete(
   '/employees/:id', 
-  employeesValidator.validate('deleteEmployee'),
+  employeesValidator.validate('validateEmployee'),
   employeesController.deleteEmployee);
 
 router.post(
@@ -25,17 +25,17 @@ router.post(
 
 router.delete(
   '/employees/:id/:taskId', 
-  employeesValidator.validate('deleteTask'),
+  employeesValidator.validate('validateMongoIdAndEmployee'),
   employeesController.deleteTask);
 
 router.put(
   '/employees/:id/:taskId', 
-  employeesValidator.validate('updateTask'),
+  employeesValidator.validate('validateMongoIdAndEmployee'),
   employeesController.updateTask);
 
 router.get(
   '/employees/:id', 
-  employeesValidator.validate('getEmployeeTasks'),
+  employeesValidator.validate('validateEmployee'),
   employeesController.getEmployeeTasks);
 
 module.exports = router;

@@ -22,26 +22,15 @@ exports.validate = (method) => {
           .isMongoId()
       ]
     }
-    case 'deleteEmployee': {
+    case 'validateEmployee': {
       return [
         check('id', 'Employee Id is not valid.').isMongoId()
       ]
     }
-    case 'deleteTask': {
+    case 'validateMongoIdAndEmployee': {
       return [
         check('id', 'Employee Id is not valid.').isMongoId(),
         check('taskId', 'Task Id is not valid.').isMongoId()
-      ]
-    }
-    case 'updateTask': {
-      return [
-        check('id', 'Employee Id is not valid.').isMongoId(),
-        check('taskId', 'Task Id is not valid.').isMongoId()
-      ]
-    }
-    case 'getEmployeeTasks': {
-      return [
-        check('id', 'Employee Id is not valid.').isMongoId()
       ]
     }
   }
