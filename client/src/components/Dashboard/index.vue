@@ -1,5 +1,7 @@
 <template>
-  <employees-dropdown class="dashboard-employees" @employeeSelected="getTasks"/>
+  <employees-dropdown 
+    @employeeSelected="getTasks"
+    class="dashboard-employees" />
   <add-task-form 
     @taskAdded="refreshTasks"
     :employeeId="employeeId"
@@ -8,10 +10,11 @@
     <div class="my-5">
       <va-divider />
     </div>
-    <Task ref="task"
-          :employeeId="employeeId"
-          @taskDeleted="refreshTasks"
-          @taskCompleted="refreshTasks" />
+    <task 
+      ref="task"
+      :employeeId="employeeId"
+      @taskDeleted="refreshTasks"
+      @taskCompleted="refreshTasks" />
   </div>
 </template>
 

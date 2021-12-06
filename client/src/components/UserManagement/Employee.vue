@@ -15,9 +15,9 @@
               @click="deleteEmployee(employee._id)"
               size="small"
               color="danger"
-              class="mr-4"
-              >Delete</va-button
-            >
+              class="mr-4" >
+              Delete
+            </va-button>
           </td>
         </tr>
       </tbody>
@@ -32,8 +32,7 @@ export default {
   name: "Employee",
   data() {
     return {
-      employees: [],
-
+      employees: []
     };
   },
   created() {

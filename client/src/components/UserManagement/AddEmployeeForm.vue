@@ -1,47 +1,42 @@
 <template>
-    <form @submit.prevent="addEmployee" class="employee-form">
-      <div class="employee-input">
-        <va-input
-          class="mb-4"
-          v-model="name"
-          label="name"
-        />
-        <div class="input-employee-error" v-if="error">{{ error }}</div>
-      </div>
-      <div class="employee-button">
-        <va-button type="submit"> Add new user </va-button></div>
-    </form>
+  <form @submit.prevent="addEmployee" class="employee-form">
+    <div class="employee-input">
+      <va-input class="mb-4" v-model="name" label="name" />
+      <div class="input-employee-error" v-if="error">{{ error }}</div>
+    </div>
+    <div class="employee-button">
+      <va-button type="submit"> Add new user </va-button>
+    </div>
+  </form>
 </template>
 
 <script>
 import api from "../../../api/employees";
 export default {
   name: "AddEmployeeForm",
-  emits: ['employeeAdded'],
+  emits: ["employeeAdded"],
 
   data() {
     return {
-      name: '',
-      error: ''
-    }
+      name: "",
+      error: "",
+    };
   },
   methods: {
-    addEmployee(){
-      this.error = this.name.length ? '' : 'Please input employee name!';
-      if(!this.error) {
-        const employee = { "name": this.name };
-        api.addNewEmployee(employee)
-        .then(() => { this.$emit("employeeAdded"); })
-        .catch(err => console.log(err));
+    addEmployee() {
+      this.error = this.name.length ? "" : "Please input employee name!";
+      if (!this.error) {
+        api.addNewEmployee({ name: this.name })
+          .then(() => {this.$emit("employeeAdded"); })
+          .catch((err) => console.log(err));
       }
-    this.name = '';
-    }
-  }
-}
+      this.name = "";
+    },
+  },
+};
 </script>
 
 <style>
-
 .employee-form {
   display: flex;
   justify-content: center;

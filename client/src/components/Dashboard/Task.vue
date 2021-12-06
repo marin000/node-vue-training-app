@@ -101,7 +101,7 @@ export default {
   },
   computed: {
     completedTasks() {
-      return this.tasks.filter((task) => task.completed === true);
+      return this.tasks.filter((task) => task.completed);
     },
   },
 };
