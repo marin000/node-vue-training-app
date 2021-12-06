@@ -35,7 +35,7 @@ export default {
   methods: {
     getTasks(id) {
       this.employeeId = id;
-      this.$refs.task.fetchTasks(this.employeeId);
+      this.refreshTasks();
     },
     refreshTasks() {
       this.$refs.task.fetchTasks(this.employeeId);

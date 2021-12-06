@@ -35,8 +35,10 @@ export default {
       .catch((err) => (this.err = err));
     },
     selectEmployee(employee) {
-      this.value = employee;
-      this.emitEmployeeSelected(employee);
+      if(employee) {
+        this.value = employee;
+        this.emitEmployeeSelected(employee);
+      }
     },
     emitEmployeeSelected(employee) {
       this.$emit("employeeSelected", employee._id); 
