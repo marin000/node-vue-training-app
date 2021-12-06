@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Items from '../components/Items';
-
+import UserManagement from '../components/UserManagement';
+import Dashboard from '../components/Dashboard';
 const routes = [
   {
     path: "/items",
@@ -8,6 +9,22 @@ const routes = [
     component: Items,
     meta: {
       title: "Items"
+    }
+  },
+  {
+    path: "/employees",
+    name: "UserManagement",
+    component: UserManagement,
+    meta: {
+      title: "User management"
+    }
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+    meta: {
+      title: "Dashboard"
     }
   }
 ];

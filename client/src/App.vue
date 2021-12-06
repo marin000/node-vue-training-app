@@ -1,14 +1,18 @@
 <template>
-  <Items />
+<div>
+  <Navbar />
+</div>
+<main>
+  <router-view></router-view>
+</main>
 </template>
 
 <script>
-import Items from './components/Items.vue'
-
+import Navbar from './components/Navbar'
 export default {
   name: 'App',
   components: {
-    Items
+   Navbar
   }
 }
 </script>
@@ -20,6 +24,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
