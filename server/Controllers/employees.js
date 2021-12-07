@@ -79,10 +79,11 @@ async function updateTask(req, res) {
       return;
     }
     const taskComplete = req.body.completed;
-    await Task.findByIdAndUpdate(req.params.taskId, { completed: taskComplete });
-    res.status(204).send("Task updated successfully.");
+    const updatedTask = await Task.findByIdAndUpdate(
+      req.params.taskId, { completed: taskComplete });
+    res.json(updatedTask);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(404).send(error);
   }
 }
 

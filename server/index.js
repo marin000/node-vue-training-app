@@ -27,7 +27,7 @@ require('dotenv').config()
 			},
 		],
 	},
-	apis: ["./server/router.js"],
+	apis: ["./server/docs/**/*.yaml"],
 };
 const specs = swaggerJsDoc(options);
 
