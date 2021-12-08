@@ -11,15 +11,11 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerOptions = require('./docs/options-config');
 require('dotenv').config()
 
-/**
- * App Variables
- */
-
 const specs = swaggerJsDoc(swaggerOptions.options);
 
 const app = express();
 const port = process.env.PORT || 4101;
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 app.use(cors());
 const router = require('./router');
 app.use(express.json());
