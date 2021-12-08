@@ -8,28 +8,14 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerOptions = require('./docs/options-config');
 require('dotenv').config()
 
 /**
  * App Variables
  */
- const options = {
-	definition: {
-		openapi: "3.0.0",
-		info: {
-			title: "To-do app API",
-			version: "1.0.0",
-			description: "A simple to-do app API",
-		},
-		servers: [
-			{
-				url: "http://localhost:4101",
-			},
-		],
-	},
-	apis: ["./server/docs/**/*.yaml"],
-};
-const specs = swaggerJsDoc(options);
+
+const specs = swaggerJsDoc(swaggerOptions.options);
 
 const app = express();
 const port = process.env.PORT || 4101;

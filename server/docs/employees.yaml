@@ -11,8 +11,16 @@ components:
         name:
           type: string
           description: The employee name
+        createdAt:
+          type: string
+          description: The employee created
+        updatedAt:
+          type: string
+          description: The employee last updated
       example:
         name: Mate
+        createdAt: '2021-12-08T12:49:25.429Z' 
+        updatedAt: '2021-12-08T12:49:25.429Z'
 
 tags:
   name: Employees
@@ -36,12 +44,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Employees'
-        400:
+        403:
           description: Problem with name input
           content:
             application/json:
               schema:
-              type: array
+              type: object
     get:
       summary: Returns the list of all employees
       tags: [Employees]
@@ -54,7 +62,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Employees'
-        404:
+        500:
           description: Can't reach employees
           content:
             text/plain:
@@ -75,13 +83,13 @@ paths:
       responses:
         204:
           description: The employee was deleted.
-        400: 
+        403: 
           description: Employee id is not valid.
           content:
             application/json:
               schema:
-                type: array
-        404:
+                type: object
+        500:
           description: Error deleting employee.
           content:
             text/plain:
@@ -106,18 +114,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Tasks'
-        400:
+        403:
           description: The employee id is not valid
           content:
             application/json:
               schema:
-                type: array
-        404:
+                type: object
+        500:
           description: The tasks was not found
           content:
             text/plain:
               schema:
                 type: string
- 
- 
- 

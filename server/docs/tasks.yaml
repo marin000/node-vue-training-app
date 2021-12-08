@@ -17,10 +17,18 @@ components:
         completed: 
           type: boolean
           description: Is task completed or not.
+        createdAt:
+          type: string
+          description: Task created
+        updatedAt:
+          type: string
+          description: Task last updated
       example:
         name: Task1
         deadline: 2022-02-03
         completed: false
+        createdAt: '2021-12-08T12:49:25.429Z' 
+        updatedAt: '2021-12-08T12:49:25.429Z'
 
 tags:
   name: Tasks
@@ -51,12 +59,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tasks'
-        400:
+        403:
           description: Error creating new task.
           content:
             application/json:
               schema:
-                type: array
+                type: object
 
   /employees/{id}/{taskId}:
     delete:
@@ -78,13 +86,13 @@ paths:
       responses:
         204:
           description: The task was deleted.
-        400: 
+        403: 
           description: Task id is not valid.
           content:
             application/json:
               schema:
-                type: array
-        404:
+                type: object
+        500:
           description: Error deleting task.
           content:
             text/plain:
@@ -119,16 +127,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tasks'
-        400:
+        403:
           description: The employee or task id is not valid.
           content:
             application/json:
               schema:
-                type: array
-        404:
+                type: object
+        500:
           description: Error updating task.
           content:
             text/plain:
               schema:
                 type: string
-  
