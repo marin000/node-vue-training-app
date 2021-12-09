@@ -14,79 +14,47 @@ const customLevels = {
   }
 };
 
+const loggerFormat = combine(
+  timestamp({
+    format: 'YYYY-MM-DD HH:mm:ss'
+  }),
+  json(),
+  format.metadata()
+);
+
+const loggerTransports = [
+  new transports.File({ filename: 'logMessages.log' }),
+  new transports.MongoDB({
+    levels: customLevels.levels,
+    db : process.env.DB_URL,
+    options: {
+        useUnifiedTopology: true
+    },
+    collection: 'logs',
+    format: format.combine(
+    format.timestamp(),
+    format.json())
+})];
+
 const dbConnectionLogger = createLogger({
   levels: customLevels.levels,
   defaultMeta: { component: 'dbConnection' },
-  format: combine(
-    timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss'
-    }),
-    json(),
-    format.metadata()
-  ),
-  transports: [
-    new transports.File({ filename: 'logMessages.log' }),
-    new transports.MongoDB({
-      levels: customLevels.levels,
-      db : process.env.DB_URL,
-      options: {
-          useUnifiedTopology: true
-      },
-      collection: 'logs',
-      format: format.combine(
-      format.timestamp(),
-      format.json())
-  })]
+  format: loggerFormat,
+  transports: loggerTransports
 });
 
 const employeeLogger = createLogger({
   levels: customLevels.levels,
   defaultMeta: { component: 'employees' },
-  format: combine(
-    timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss'
-    }),
-    json(),
-    format.metadata()
-  ),
-  transports: [
-    new transports.File({ filename: 'logMessages.log' }),
-    new transports.MongoDB({
-      levels: customLevels.levels,
-      db : process.env.DB_URL,
-      options: {
-          useUnifiedTopology: true
-      },
-      collection: 'logs',
-      format: format.combine(
-      format.timestamp(),
-      format.json())
-  })]
+  format: loggerFormat,
+  transports: loggerTransports
 });
 
 const taskLogger = createLogger({
   levels: customLevels.levels,
   defaultMeta: { component: 'tasks' },
-  format: combine(
-    timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss'
-    }),
-    json(),
-    format.metadata()
-  ),
-  transports: [
-    new transports.File({ filename: 'logMessages.log' }),
-    new transports.MongoDB({
-      levels: customLevels.levels,
-      db : process.env.DB_URL,
-      options: {
-          useUnifiedTopology: true
-      },
-      collection: 'logs',
-      format: format.combine(
-      format.timestamp(),
-      format.json())
-  })]
+  format: loggerFormat,
+  transports: loggerTransports
 });
 
 module.exports = {
