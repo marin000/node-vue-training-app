@@ -9,6 +9,7 @@ const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerOptions = require('./docs/options-config');
+const { dbConnectionLogger } = require('./logger/logger');
 require('dotenv').config()
 
 const specs = swaggerJsDoc(swaggerOptions.options);
@@ -33,9 +34,11 @@ const connectionParams = {
 mongoose.connect(url, connectionParams)
   .then(() => {
     console.log('Connected to database ')
+    dbConnectionLogger.info('Conneted to database');
   })
   .catch((err) => {
     console.error(`Error connecting to the database. \n${err}`);
+    dbConnectionLogger.error(`Error connecting to the database. \n${err}`);
   })
 
 /**

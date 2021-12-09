@@ -1,6 +1,7 @@
 const express = require("express");
 const itemController = require('./Controllers/items');
 const employeesController = require('./Controllers/employees');
+const logsController = require('./Controllers/logs');
 const employeesValidator = require('./validators/employeesValidator');
 const router = express.Router();
 
@@ -38,5 +39,7 @@ router.get(
   '/employees/:id',
   employeesValidator.validate('validateEmployee'),
   employeesController.getEmployeeTasks);
+
+router.post('/logs', logsController.getLogs);
 
 module.exports = router;

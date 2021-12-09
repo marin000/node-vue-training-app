@@ -1,0 +1,67 @@
+components:
+  schemas:
+    Logs:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The auto-generated id of the task
+        timestamp:
+          type: string
+          description: Log created
+        meta:
+          type: string
+          description: Log info
+        level:
+          type: boolean
+          description: Log level
+        message:
+          type: string
+          description: Log message
+      example:
+        id: sds867sd767a6ds9as
+        timestamp: '2021-12-09T11:13:04.908+00:00'
+        meta: {
+            "component": "employees",
+            "timestamp": "2021-12-09 13:58:13"
+        }
+        level: 'info'
+        message: 'Task deleted'
+
+tags:
+  name: Logs
+  description: To-do app API logs
+
+paths:
+  /logs:
+    post:
+      summary: Get logs
+      tags: [Logs]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                count:
+                  type: integer
+                sort:
+                  type: string
+                level:
+                  type: string
+                message:
+                  type: string
+      responses:
+        201:
+          description: Get logs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Logs"
+        500:
+          description: Error getting logs.
+          content:
+            text/plain:
+              schema:
+                type: string
