@@ -1,6 +1,7 @@
 const Employee = require('../Models/Employees');
 const Task = require('../Models/Tasks');
 const { validationResult } = require('express-validator');
+const { employeeLogger } = require('../logger/logger');
 
 async function create(req, res, next) {
   try {
@@ -11,6 +12,7 @@ async function create(req, res, next) {
     }
     const newEmployee = Employee(req.body);
     await newEmployee.save();
+    employeeLogger.info('New employee created');
     res.status(201).send(newEmployee);
   } catch (error) {
     return next(error);
