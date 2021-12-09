@@ -1,0 +1,128 @@
+components:
+  schemas:
+    Employees:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          description: The auto-generated id of the employee
+        name:
+          type: string
+          description: The employee name
+        createdAt:
+          type: string
+          description: The employee created
+        updatedAt:
+          type: string
+          description: The employee last updated
+      example:
+        name: Mate
+        createdAt: '2021-12-08T12:49:25.429Z' 
+        updatedAt: '2021-12-08T12:49:25.429Z'
+
+tags:
+  name: Employees
+  description: To-do app API employees
+
+paths:
+  /employees:
+    post:
+      summary: Create a new employee
+      tags: [Employees]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employees'
+      responses:
+        201:
+          description: The new employee was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employees'
+        403:
+          description: Problem with name input
+          content:
+            application/json:
+              schema:
+              type: object
+    get:
+      summary: Returns the list of all employees
+      tags: [Employees]
+      responses:
+        200:
+          description: The list of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employees'
+        500:
+          description: Can't reach employees
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /employees/{id}:
+    delete:
+      summary: Remove the employee by id
+      tags: [Employees]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            required: true
+            description: The employee id
+      responses:
+        204:
+          description: The employee was deleted.
+        403: 
+          description: Employee id is not valid.
+          content:
+            application/json:
+              schema:
+                type: object
+        500:
+          description: Error deleting employee.
+          content:
+            text/plain:
+              schema:
+                type: string
+    get:
+      summary: Get employee tasks
+      tags: [Employees]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The employee tasks
+      responses:
+        200:
+          description: The employee tasks 
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tasks'
+        403:
+          description: The employee id is not valid
+          content:
+            application/json:
+              schema:
+                type: object
+        500:
+          description: The tasks was not found
+          content:
+            text/plain:
+              schema:
+                type: string

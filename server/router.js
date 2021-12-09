@@ -8,33 +8,34 @@ router.get('/item', itemController.fetch)
 router.post('/item', itemController.create)
 
 router.post(
-  '/employees', 
+  '/employees',
   employeesValidator.validate('create'),
   employeesController.create);
 
 router.get('/employees', employeesController.fetch);
+
 router.delete(
-  '/employees/:id', 
+  '/employees/:id',
   employeesValidator.validate('validateEmployee'),
   employeesController.deleteEmployee);
 
 router.post(
-  '/employees/:id', 
+  '/employees/:id',
   employeesValidator.validate('createTask'),
   employeesController.createTask);
 
 router.delete(
-  '/employees/:id/:taskId', 
+  '/employees/:id/:taskId',
   employeesValidator.validate('validateMongoIdAndEmployee'),
   employeesController.deleteTask);
 
 router.put(
-  '/employees/:id/:taskId', 
+  '/employees/:id/:taskId',
   employeesValidator.validate('validateMongoIdAndEmployee'),
   employeesController.updateTask);
 
 router.get(
-  '/employees/:id', 
+  '/employees/:id',
   employeesValidator.validate('validateEmployee'),
   employeesController.getEmployeeTasks);
 
