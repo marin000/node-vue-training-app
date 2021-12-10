@@ -48,6 +48,9 @@ paths:
                   type: integer
                 sort:
                   type: string
+                  enum: 
+                    - asc
+                    - desc
                 level:
                   type: string
                 message:
@@ -59,6 +62,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Logs"
+        403:
+          description: Request body is not valid
+          content:
+            application/json:
+              schema:
+                type: object
         500:
           description: Error getting logs.
           content:

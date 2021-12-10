@@ -1,5 +1,5 @@
 // index.js
-
+const { simpleLogger } = require('./logger/logger');
 /**
  * Required External Modules
  */
@@ -33,7 +33,7 @@ const connectionParams = {
 }
 mongoose.connect(url, connectionParams)
   .then(() => {
-    console.log('Connected to database ')
+    simpleLogger.info('Connect');
     dbConnectionLogger.info('Conneted to database');
   })
   .catch((err) => {

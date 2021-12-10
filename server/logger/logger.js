@@ -1,5 +1,5 @@
 const { createLogger, format, transports } = require('winston');
-const { combine, timestamp, json } = format;
+const { combine, timestamp, json, printf } = format;
 require('dotenv').config()
 require('winston-mongodb');
 
@@ -23,18 +23,18 @@ const loggerFormat = combine(
 );
 
 const loggerTransports = [
-  new transports.File({ filename: 'logMessages.log' }),
+  new transports.File({ filename: 'logs/logMessages.log' }),
   new transports.MongoDB({
     levels: customLevels.levels,
-    db : process.env.DB_URL,
+    db: process.env.DB_URL,
     options: {
-        useUnifiedTopology: true
+      useUnifiedTopology: true
     },
     collection: 'logs',
     format: format.combine(
-    format.timestamp(),
-    format.json())
-})];
+      format.timestamp(),
+      format.json())
+  })];
 
 const dbConnectionLogger = createLogger({
   levels: customLevels.levels,
@@ -57,8 +57,33 @@ const taskLogger = createLogger({
   transports: loggerTransports
 });
 
+const logsLogger = createLogger({
+  levels: customLevels.levels,
+  defaultMeta: { component: 'logs' },
+  format: loggerFormat,
+  transports: loggerTransports
+});
+
+const simpleFormat = printf(({ level, message, timestamp }) => {
+  return `${timestamp} ${level}: ${message}`;
+});
+
+const simpleLogger = createLogger({
+  levels: customLevels.levels,
+  format: combine(
+    timestamp(),
+    format.align(),
+    simpleFormat
+  ),
+  transports: [
+    new transports.Console(),
+  ]
+});
+
 module.exports = {
   dbConnectionLogger: dbConnectionLogger,
   employeeLogger: employeeLogger,
-  taskLogger: taskLogger
+  taskLogger: taskLogger,
+  logsLogger: logsLogger,
+  simpleLogger: simpleLogger
 };

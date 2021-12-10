@@ -42,11 +42,11 @@ async function deleteEmployee(req, res) {
     }
     await Task.deleteMany({ employee: req.params.id });
     await Employee.findByIdAndDelete(req.params.id);
-    res.status(204).send('Employee deleted successfully');
     employeeLogger.info('Employee deleted successfully');
+    res.status(204).send('Employee deleted successfully');
   } catch (error) {
-    res.status(500).send(error.message);
     employeeLogger.error(error.message);
+    res.status(500).send(error.message);
   }
 }
 
@@ -61,8 +61,8 @@ async function createTask(req, res, next) {
     const newTask = Task(req.body);
     newTask.employee = req.params.id;
     await newTask.save();
-    res.status(201).send(newTask);
     taskLogger.info('New task created');
+    res.status(201).send(newTask);
   } catch (error) {
     taskLogger.error(error.message);
     return next(error);
@@ -78,11 +78,11 @@ async function deleteTask(req, res) {
       return;
     }
     await Task.findByIdAndDelete(req.params.taskId);
-    res.status(204).send('Task deleted successfully.');
     taskLogger.info('Task deleted successfully');
+    res.status(204).send('Task deleted successfully.');
   } catch (error) {
-    res.status(500).send(error.message);
     taskLogger.error(error.message);
+    res.status(500).send(error.message);
   }
 }
 
@@ -97,11 +97,11 @@ async function updateTask(req, res) {
     const { completed } = req.body;
     const updatedTask = await Task.findByIdAndUpdate(
       req.params.taskId, { completed });
-    res.json(updatedTask);
     taskLogger.info('Task updated successfully');
+    res.json(updatedTask);
   } catch (error) {
-    res.status(500).send(error.message);
     taskLogger.error(error.message);
+    res.status(500).send(error.message);
   }
 }
 
@@ -114,11 +114,11 @@ async function getEmployeeTasks(req, res) {
       return;
     }
     const tasks = await Task.find({ employee: req.params.id });
-    res.json(tasks);
     employeeLogger.info('Get employee tasks successfully');
+    res.json(tasks);
   } catch (error) {
-    res.status(500).send(error.message);
     employeeLogger.error(error.message);
+    res.status(500).send(error.message);
   }
 }
 

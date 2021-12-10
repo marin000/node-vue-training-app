@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-var ItemShema = new Schema({
+const ItemShema = new Schema({
     name: String,
     createdAt: { type: Date, default: Date.now() }
 });

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-var LogsShema = new mongoose.Schema({
+const LogsShema = new mongoose.Schema({
   timestamp: String,
   meta: {
     component: String,
