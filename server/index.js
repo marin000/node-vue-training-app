@@ -33,7 +33,7 @@ const connectionParams = {
 }
 mongoose.connect(url, connectionParams)
   .then(() => {
-    simpleLogger.info('Connect');
+    simpleLogger.info('Connect to database');
     dbConnectionLogger.info('Conneted to database');
   })
   .catch((err) => {

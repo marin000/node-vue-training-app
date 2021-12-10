@@ -16,7 +16,7 @@ async function create(req, res, next) {
     employeeLogger.info('New employee created');
     res.status(201).send(newEmployee);
   } catch (error) {
-    employeeLogger.error(error.message);
+    employeeLogger.error(error.message, { metadata: error.stack });
     return next(error);
   }
 }
@@ -27,7 +27,7 @@ async function fetch(req, res) {
     employeeLogger.info('Successfully get all employees');
     res.json(data);
   } catch (error) {
-    employeeLogger.error(error.message);
+    employeeLogger.error(error.message, { metadata: error.stack });
     res.status(500).send(error.message);
   }
 }
@@ -45,7 +45,7 @@ async function deleteEmployee(req, res) {
     employeeLogger.info('Employee deleted successfully');
     res.status(204).send('Employee deleted successfully');
   } catch (error) {
-    employeeLogger.error(error.message);
+    employeeLogger.error(error.message, { metadata: error.stack });
     res.status(500).send(error.message);
   }
 }
@@ -64,7 +64,7 @@ async function createTask(req, res, next) {
     taskLogger.info('New task created');
     res.status(201).send(newTask);
   } catch (error) {
-    taskLogger.error(error.message);
+    taskLogger.error(error.message, { metadata: error.stack });
     return next(error);
   }
 }
@@ -81,7 +81,7 @@ async function deleteTask(req, res) {
     taskLogger.info('Task deleted successfully');
     res.status(204).send('Task deleted successfully.');
   } catch (error) {
-    taskLogger.error(error.message);
+    taskLogger.error(error.message, { metadata: error.stack });
     res.status(500).send(error.message);
   }
 }
@@ -100,7 +100,7 @@ async function updateTask(req, res) {
     taskLogger.info('Task updated successfully');
     res.json(updatedTask);
   } catch (error) {
-    taskLogger.error(error.message);
+    taskLogger.error(error.message, { metadata: error.stack });
     res.status(500).send(error.message);
   }
 }
@@ -117,7 +117,7 @@ async function getEmployeeTasks(req, res) {
     employeeLogger.info('Get employee tasks successfully');
     res.json(tasks);
   } catch (error) {
-    employeeLogger.error(error.message);
+    employeeLogger.error(error.message, { metadata: error.stack });
     res.status(500).send(error.message);
   }
 }
