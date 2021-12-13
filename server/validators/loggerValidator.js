@@ -1,14 +1,15 @@
-const { body } = require('express-validator')
+const { body } = require('express-validator');
+const message = require('../constants/validatorMessages');
 
 exports.validate = (method) => {
   switch (method) {
     case 'logValidate': {
       return [
-        body('count', 'count must be number').isNumeric(),
-        body('sort', 'only asc or desc').isIn(['asc', 'desc']),
-        body('level', 'level is not valid')
+        body('count', message.COUNT).isNumeric(),
+        body('sort', message.SORT).isIn(['asc', 'desc']),
+        body('level', message.LEVEL)
           .isIn(['fatal', 'error', 'warn', 'info', 'debug', 'trace']),
-        body('message', 'message must not contain numbers').isAlpha()
+        body('message', message.MESSAGE).isAlpha()
       ]
     }
   }

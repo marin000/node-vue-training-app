@@ -1,22 +1,23 @@
-const { body, check } = require('express-validator')
+const { body, check } = require('express-validator');
+const message = require('../constants/validatorMessages');
 
 exports.validate = (method) => {
   switch (method) {
     case 'create': {
       return [
-        body('name', 'name is too short').isLength({ min: 2 }),
-        body('name', 'name is too long').isLength({ max: 20 }),
-        body('name', 'name must not contain numbers').isAlpha()
+        body('name', message.NAME_SHORT).isLength({ min: 2 }),
+        body('name', message.NAME_LONG).isLength({ max: 20 }),
+        body('name', message.NAME_CONTAIN_NUM).isAlpha()
       ]
     }
     case 'createTask': {
       return [
-        body('name', 'name is too short').isLength({ min: 2 }),
-        body('name', 'name is too long').isLength({ max: 15 }),
-        body('deadline', 'the date cannot be in the past')
+        body('name', message.NAME_SHORT).isLength({ min: 2 }),
+        body('name', message.NAME_LONG).isLength({ max: 15 }),
+        body('deadline', message.DATE_PAST)
           .isAfter(new Date()
           .toDateString()),
-        check('id', 'Employee Id is not selected or valid.')
+        check('id', message.EMPLOYEE_ID)
           .trim()
           .exists()
           .isMongoId()
@@ -24,13 +25,13 @@ exports.validate = (method) => {
     }
     case 'validateEmployee': {
       return [
-        check('id', 'Employee Id is not valid.').isMongoId()
+        check('id', message.EMPLOYEE_ID).isMongoId()
       ]
     }
     case 'validateMongoIdAndEmployee': {
       return [
-        check('id', 'Employee Id is not valid.').isMongoId(),
-        check('taskId', 'Task Id is not valid.').isMongoId()
+        check('id', message.EMPLOYEE_ID).isMongoId(),
+        check('taskId', message.TASK_ID).isMongoId()
       ]
     }
   }
