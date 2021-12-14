@@ -20,7 +20,8 @@ async function getLogs(req, res) {
       desc: -1
     };
     const { level, message, count, sort } = req.body;
-    const sortType = sort === 'asc';
+    const ascSort = 'asc';
+    const sortType = sort === ascSort;
 
     const data = await Log.find({ $or: [{ level }, { message }] })
       .sort({ timestamp: sortType ? SortOrder.asc : SortOrder.desc })
