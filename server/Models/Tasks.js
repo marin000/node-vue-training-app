@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-var TasksShema = new mongoose.Schema({
+const TasksShema = new mongoose.Schema({
   name: {
     type: String,
     required: "Task must have a name!"

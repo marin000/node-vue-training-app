@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-var EmployeesShema = new mongoose.Schema({
+const EmployeesShema = new mongoose.Schema({
   name: {
     type: String,
     required: "Employee must have a name!"
