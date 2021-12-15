@@ -1,26 +1,27 @@
 const nodemailer = require('nodemailer');
 const { simpleLogger } = require('../logger/logger');
+const config = require('../config/index');
 
 async function sendEmail(emailMessage,
   emailSubject = 'Notice from Agilathon To Do app',
-  recipientAddress = process.env.MAIL_RECIPIENT) {
+  recipientAddress = config.mailRecipient) {
 
   const testAccount = await nodemailer.createTestAccount();
+  const { mailConfig: { service, host, port, secure } } = config;
 
   const transporter = nodemailer.createTransport({
-    service: process.env.MAIL_USERNAME && process.env.MAIL_PASSWORD ?
-      'gmail' : '',
-    host: 'smtp.ethereal.email',
-    port: 587,
-    secure: false,
+    service: service,
+    host: host,
+    port: port,
+    secure: secure,
     auth: {
-      user: process.env.MAIL_USERNAME || testAccount.user,
-      pass: process.env.MAIL_PASSWORD || testAccount.pass
+      user: config.mailUsername || testAccount.user,
+      pass: config.mailPassword || testAccount.pass
     }
   });
 
   const mailOptions = {
-    from: process.env.MAIL_USERNAME || 'test@gmail.com',
+    from: config.mailUsername || 'test@gmail.com',
     to: recipientAddress,
     subject: emailSubject,
     text: emailMessage
