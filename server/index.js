@@ -9,7 +9,6 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerOptions = require('./docs/options-config');
 const { dbConnectionLogger, simpleLogger } = require('./logger/logger');
-const errorMessage = require('./constants/errorMessages');
 const email = require('./service/email');
 require('dotenv').config()
 
@@ -40,9 +39,7 @@ mongoose.connect(url, connectionParams)
   .catch((err) => {
     console.error(`Error connecting to the database. \n${err}`);
     dbConnectionLogger.error(`Error connecting to the database. \n${err}`);
-    email.sendEmail(errorMessage.SERVER_ERROR,
-      `Error connecting to the database. \n${err}`,
-      'marin.buric@agilathon.com')
+    email.sendEmail(`Error connecting to the database. \n${err}`)
   })
 
 /**

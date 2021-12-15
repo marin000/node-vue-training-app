@@ -3,7 +3,6 @@ const Task = require('../Models/Tasks');
 const { validationResult } = require('express-validator');
 const { employeeLogger, taskLogger } = require('../logger/logger');
 const infoMessage = require('../constants/infoMessages');
-const errorMessage = require('../constants/errorMessages');
 const email = require('../service/email');
 
 async function create(req, res, next) {
@@ -11,19 +10,17 @@ async function create(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       employeeLogger.error(errors);
-      email.sendEmail(errorMessage.VALIDATION_ERROR,
-        JSON.stringify(errors.array()), 'marin.buric@agilathon.com');
+      email.sendEmail(JSON.stringify(errors.array()));
       res.status(403).json({ errors: errors.array() });
       return;
     }
-    const newEmployee = Employee('req.body');
+    const newEmployee = Employee(req.body);
     await newEmployee.save();
     employeeLogger.info(infoMessage.NEW_EMPLOYEE);
     res.status(201).send(newEmployee);
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
-    email.sendEmail(errorMessage.SERVER_ERROR, error.message,
-      'marin.buric@agilathon.com');
+    email.sendEmail(error.message);
     return next(error);
   }
 }
@@ -35,8 +32,7 @@ async function fetch(req, res) {
     res.json(data);
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
-    email.sendEmail(errorMessage.SERVER_ERROR, error.message,
-      'marin.buric@agilathon.com');
+    email.sendEmail(error.message);
     res.status(500).send(error.message);
   }
 }
@@ -46,8 +42,7 @@ async function deleteEmployee(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       employeeLogger.error(errors);
-      email.sendEmail(errorMessage.VALIDATION_ERROR,
-        JSON.stringify(errors.array()), 'marin.buric@agilathon.com');
+      email.sendEmail(JSON.stringify(errors.array()));
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -57,8 +52,7 @@ async function deleteEmployee(req, res) {
     res.status(204).send('Employee deleted successfully');
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
-    email.sendEmail(errorMessage.SERVER_ERROR, error.message,
-      'marin.buric@agilathon.com');
+    email.sendEmail(error.message);
     res.status(500).send(error.message);
   }
 }
@@ -68,8 +62,7 @@ async function createTask(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       taskLogger.error(errors);
-      email.sendEmail(errorMessage.VALIDATION_ERROR,
-        JSON.stringify(errors.array()), 'marin.buric@agilathon.com');
+      email.sendEmail(JSON.stringify(errors.array()));
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -80,8 +73,7 @@ async function createTask(req, res, next) {
     res.status(201).send(newTask);
   } catch (error) {
     taskLogger.error(error.message, { metadata: error.stack });
-    email.sendEmail(errorMessage.SERVER_ERROR, error.message,
-      'marin.buric@agilathon.com');
+    email.sendEmail(error.message);
     return next(error);
   }
 }
@@ -91,8 +83,7 @@ async function deleteTask(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       taskLogger.error(errors);
-      email.sendEmail(errorMessage.VALIDATION_ERROR,
-        JSON.stringify(errors.array()), 'marin.buric@agilathon.com');
+      email.sendEmail(JSON.stringify(errors.array()));
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -101,8 +92,7 @@ async function deleteTask(req, res) {
     res.status(204).send('Task deleted successfully.');
   } catch (error) {
     taskLogger.error(error.message, { metadata: error.stack });
-    email.sendEmail(errorMessage.SERVER_ERROR, error.message,
-      'marin.buric@agilathon.com');
+    email.sendEmail(error.message);
     res.status(500).send(error.message);
   }
 }
@@ -112,8 +102,7 @@ async function updateTask(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       taskLogger.error(errors);
-      email.sendEmail(errorMessage.VALIDATION_ERROR,
-        JSON.stringify(errors.array()), 'marin.buric@agilathon.com');
+      email.sendEmail(JSON.stringify(errors.array()));
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -124,8 +113,7 @@ async function updateTask(req, res) {
     res.json(updatedTask);
   } catch (error) {
     taskLogger.error(error.message, { metadata: error.stack });
-    email.sendEmail(errorMessage.SERVER_ERROR, error.message,
-      'marin.buric@agilathon.com');
+    email.sendEmail(error.message);
     res.status(500).send(error.message);
   }
 }
@@ -135,8 +123,7 @@ async function getEmployeeTasks(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       employeeLogger.error(errors);
-      email.sendEmail(errorMessage.VALIDATION_ERROR,
-        JSON.stringify(errors.array()), 'marin.buric@agilathon.com');
+      email.sendEmail(JSON.stringify(errors.array()));
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -145,8 +132,7 @@ async function getEmployeeTasks(req, res) {
     res.json(tasks);
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
-    email.sendEmail(errorMessage.SERVER_ERROR, error.message,
-      'marin.buric@agilathon.com');
+    email.sendEmail(error.message);
     res.status(500).send(error.message);
   }
 }
