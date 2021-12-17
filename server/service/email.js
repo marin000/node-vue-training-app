@@ -1,9 +1,10 @@
 const nodemailer = require('nodemailer');
 const { simpleLogger } = require('../logger/logger');
 const config = require('../config/index');
+const emailDefault = require('../constants/email');
 
 async function sendEmail(emailMessage,
-  emailSubject = 'Notice from Agilathon To Do app',
+  emailSubject = emailDefault.DEFAULT_EMAIL_SUBJECT,
   recipientAddress = config.mailRecipient) {
 
   const testAccount = await nodemailer.createTestAccount();
@@ -21,10 +22,10 @@ async function sendEmail(emailMessage,
   });
 
   const mailOptions = {
-    from: config.mailUsername || 'test@gmail.com',
+    from: config.mailFrom,
     to: recipientAddress,
     subject: emailSubject,
-    text: emailMessage
+    text: emailMessage || emailDefault.DEFAULT_EMAIL_MESSAGE
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
