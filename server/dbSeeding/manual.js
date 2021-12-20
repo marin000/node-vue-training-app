@@ -10,13 +10,19 @@ const connectionParams = {
 }
 mongoose.connect(config.dbUrl, connectionParams)
   .then(() => {
-    seedingService.seedEmployees();
-    seedingService.seedTasks();
     simpleLogger.info('Connect to database');
     dbConnectionLogger.info('Conneted to database');
+    DBseding();
+    mongoose.connection.close();
+    simpleLogger.info('Disconnect from database');
+    process.exit();
   })
   .catch((err) => {
     console.error(`Error connecting to the database. \n${err}`);
     dbConnectionLogger.error(`Error connecting to the database. \n${err}`);
     email.sendEmail(`Error connecting to the database. \n${err}`);
   })
+
+function DBseding() {
+  Promise.all([seedingService.seedEmployees, seedingService.seedTasks]);
+}
