@@ -2,14 +2,14 @@ const Log = require('../Models/Logs');
 const { validationResult } = require('express-validator');
 const { logsLogger } = require('../logger/logger');
 const infoMessage = require('../constants/infoMessages');
-const email = require('../service/email');
+const emailService = require('../service/email');
 
 async function getLogs(req, res) {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       logsLogger.error(errors);
-      email.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail(JSON.stringify(errors.array()));
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -28,7 +28,7 @@ async function getLogs(req, res) {
     res.json(data);
   } catch (error) {
     logsLogger.error(error.message);
-    email.sendEmail(error.message);
+    emailService.sendEmail(error.message);
     res.status(500).send(error.message);
   }
 }

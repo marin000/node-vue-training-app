@@ -8,7 +8,9 @@ async function sendEmail(emailMessage,
   recipientAddress = config.mailRecipient) {
 
   const testAccount = await nodemailer.createTestAccount();
-  const { mailConfig: { service, host, port, secure } } = config;
+  const { user, pass } = testAccount;
+  const { mailUsername, mailPassword, mailFrom, 
+    mailConfig: { service, host, port, secure } } = config;
 
   const transporter = nodemailer.createTransport({
     service: service,
@@ -16,22 +18,26 @@ async function sendEmail(emailMessage,
     port: port,
     secure: secure,
     auth: {
-      user: config.mailUsername || testAccount.user,
-      pass: config.mailPassword || testAccount.pass
+      user: mailUsername || user,
+      pass: mailPassword || pass
     }
   });
 
   const mailOptions = {
-    from: config.mailFrom,
+    from: mailFrom,
     to: recipientAddress,
     subject: emailSubject,
-    text: emailMessage || emailDefault.DEFAULT_EMAIL_MESSAGE
+    text: emailMessage 
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       simpleLogger.error(error);
-    } else {
+    }
+    else if(!mailOptions.text){
+      throw new Error('Email text missing!');
+    } 
+    else {
       simpleLogger.info('Email sent: ' + info.response);
     }
   });
