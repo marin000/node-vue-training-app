@@ -11,7 +11,7 @@ const swaggerOptions = require('./docs/options-config');
 const { dbConnectionLogger, simpleLogger } = require('./logger/logger');
 const email = require('./service/email');
 const config = require('./config/index');
-const dbSeeding= require('./dbSeeding/automatic');
+const seedingService= require('./dbSeeding/automatic');
 require('dotenv').config()
 
 const specs = swaggerJsDoc(swaggerOptions.options);
@@ -32,7 +32,7 @@ const connectionParams = {
 }
 mongoose.connect(config.dbUrl, connectionParams)
   .then(() => {
-    dbSeeding.seeding();
+    seedingService.seeding();
     simpleLogger.info('Connect to database');
     dbConnectionLogger.info('Conneted to database');
   })

@@ -1,12 +1,15 @@
 const Employee = require('../Models/Employees');
 const Task = require('../Models/Tasks');
 const { simpleLogger } = require('../logger/logger');
+const config = require('../constants/seeding');
 const faker = require('faker');
 const moment = require('moment');
+const Promise = require('bluebird');
 
-async function employees() {
+
+async function seedEmployees() {
   let employees = [];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < config.EMPLOYEES_COUNT; i++) {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
     const newEmployee = {
@@ -22,22 +25,28 @@ async function employees() {
   simpleLogger.info('Employees collection filled.')
 }
 
-async function tasks() {
-  let tasks = [];
-  for (let i = 0; i < 100; i++) {
-    const count = await Employee.count();
-    const rand = Math.floor(Math.random() * count);
-    const employee = await Employee.findOne().skip(rand);
+async function seedTasks() {
+  const taskArr = [];
+  for (let i = 0; i < config.TASKS_COUNT; i++) {
     const deadline = moment(faker.date.soon()).format('YYYY-MM-DD')
     const newTask = {
       name: faker.lorem.word(),
       deadline,
       completed: false,
-      employee: employee._id
+      employee: null
     }
-    tasks.push(newTask);
+    taskArr.push(newTask);
   }
-  await Task.insertMany(tasks);
-  simpleLogger.info('Tasks collection filled.')
+  const count = await Employee.count();
+  Promise.each(taskArr, function (task) {
+    return (async function () {
+      const rand = Math.floor(Math.random() * count);
+      const employee = await Employee.findOne().skip(rand);
+      task.employee = employee._id;
+    });
+  }).then(function (tasks) {
+    Task.insertMany(tasks);
+    simpleLogger.info('Tasks collection filled.')
+  });
 }
-module.exports = { employees, tasks }
+module.exports = { seedEmployees, seedTasks }

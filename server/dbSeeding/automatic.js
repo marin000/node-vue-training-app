@@ -9,8 +9,8 @@ function seeding() {
       simpleLogger.error(err);
       email.sendEmail(err);
     }
-    else if (count == 0) {
-      seedingService.employees();
+    else if (count === 0) {
+      seedingService.seedEmployees();
     }
   });
 
@@ -20,7 +20,7 @@ function seeding() {
       email.sendEmail(err);
     }
     else if (count === 0) {
-      seedingService.tasks();
+      seedingService.seedTasks();
     }
   });
 }
