@@ -1,5 +1,4 @@
 // index.js
-const { simpleLogger } = require('./logger/logger');
 /**
  * Required External Modules
  */
@@ -9,13 +8,15 @@ const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerOptions = require('./docs/options-config');
-const { dbConnectionLogger } = require('./logger/logger');
+const { dbConnectionLogger, simpleLogger } = require('./logger/logger');
+const emailService = require('./service/email');
+const config = require('./config/index');
 require('dotenv').config()
 
 const specs = swaggerJsDoc(swaggerOptions.options);
 
 const app = express();
-const port = process.env.PORT || 4101;
+const port = config.port;
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 app.use(cors());
 const router = require('./router');
@@ -26,12 +27,11 @@ app.use(router);
 /**
  * DB connection
  */
-const url = process.env.DB_URL;
 const connectionParams = {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }
-mongoose.connect(url, connectionParams)
+mongoose.connect(config.dbUrl, connectionParams)
   .then(() => {
     simpleLogger.info('Connect to database');
     dbConnectionLogger.info('Conneted to database');
@@ -39,6 +39,7 @@ mongoose.connect(url, connectionParams)
   .catch((err) => {
     console.error(`Error connecting to the database. \n${err}`);
     dbConnectionLogger.error(`Error connecting to the database. \n${err}`);
+    emailService.sendEmail(`Error connecting to the database. \n${err}`)
   })
 
 /**
