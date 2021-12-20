@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const { dbConnectionLogger, simpleLogger } = require('../logger/logger');
 const email = require('../service/email');
 const config = require('../config/index');
+const dbMessages = require('../constants/dbMessages');
+const { CONNECTED, DISCONNECTED, ERROR_CONNECTING } = dbMessages;
 
 const connectionParams = {
   useNewUrlParser: true,
@@ -10,21 +12,26 @@ const connectionParams = {
 }
 mongoose.connect(config.dbUrl, connectionParams)
   .then(() => {
-    simpleLogger.info('Connect to database');
-    dbConnectionLogger.info('Conneted to database');
-    DBseding();
+    simpleLogger.info(CONNECTED);
+    dbConnectionLogger.info(CONNECTED);
+    DBseeding();
   })
   .catch((err) => {
-    console.error(`Error connecting to the database. \n${err}`);
-    dbConnectionLogger.error(`Error connecting to the database. \n${err}`);
-    email.sendEmail(`Error connecting to the database. \n${err}`);
+    console.error(ERROR_CONNECTING + `\n${err}`);
+    dbConnectionLogger.error(ERROR_CONNECTING + `\n${err}`);
+    email.sendEmail(ERROR_CONNECTING + `\n${err}`);
   })
 
-async function DBseding() {
-  Promise.all([seedingService.seedEmployees(), seedingService.seedTasks()])
-    .then(() => {
-      mongoose.connection.close();
-      simpleLogger.info('Disconnect from database');
-      process.exit();
-    });
+async function closeMongoConnection() {
+  await mongoose.connection.close();
+  simpleLogger.info(DISCONNECTED);
+  process.exit();
+} 
+  
+async function DBseeding() {
+  await seedingService.seedEmployees();
+  await seedingService.seedTasks();
+  await closeMongoConnection();
 }
+
+

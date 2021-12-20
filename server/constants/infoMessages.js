@@ -6,5 +6,8 @@ module.exports = {
   DELETE_TASK: 'Task deleted successfully.',
   UPDATE_TASK: 'Task updated successfully.',
   GET_TASKS: 'Get employee tasks successfully.',
-  GET_LOGS: 'Successfully get all logs.'
+  GET_LOGS: 'Successfully get all logs.',
+  EMPLOYEES_FILLED: 'Employees collection filled.',
+  TASKS_FILLED: 'Tasks collection filled.',
+  EMAIL_SENT: 'Email sent:'
 }
