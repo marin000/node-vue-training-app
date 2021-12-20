@@ -13,9 +13,6 @@ mongoose.connect(config.dbUrl, connectionParams)
     simpleLogger.info('Connect to database');
     dbConnectionLogger.info('Conneted to database');
     DBseding();
-    mongoose.connection.close();
-    simpleLogger.info('Disconnect from database');
-    process.exit();
   })
   .catch((err) => {
     console.error(`Error connecting to the database. \n${err}`);
@@ -23,6 +20,11 @@ mongoose.connect(config.dbUrl, connectionParams)
     email.sendEmail(`Error connecting to the database. \n${err}`);
   })
 
-function DBseding() {
-  Promise.all([seedingService.seedEmployees, seedingService.seedTasks]);
+async function DBseding() {
+  Promise.all([seedingService.seedEmployees(), seedingService.seedTasks()])
+    .then(() => {
+      mongoose.connection.close();
+      simpleLogger.info('Disconnect from database');
+      process.exit();
+    });
 }
