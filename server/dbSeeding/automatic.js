@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { simpleLogger } = require('../logger/logger');
 const email = require('../service/email');
 
-function seeding() {
+function seed() {
   mongoose.connection.db.collection('employees').count(function (err, count) {
     if (err) {
       simpleLogger.error(err);
@@ -24,4 +24,4 @@ function seeding() {
     }
   });
 }
-module.exports = { seeding }
+module.exports = { seed }
