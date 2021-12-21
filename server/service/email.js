@@ -2,6 +2,8 @@ const nodemailer = require('nodemailer');
 const { simpleLogger } = require('../logger/logger');
 const config = require('../config/index');
 const emailDefault = require('../constants/email');
+const errorMessages = require('../constants/errorMessages');
+const infoMessages = require('../constants/infoMessages');
 
 async function sendEmail(emailMessage,
   emailSubject = emailDefault.DEFAULT_EMAIL_SUBJECT,
@@ -35,10 +37,10 @@ async function sendEmail(emailMessage,
       simpleLogger.error(error);
     }
     else if(!mailOptions.text){
-      throw new Error('Email text missing!');
+      throw new Error(errorMessages.EMAIL_TEXT_MISSING);
     } 
     else {
-      simpleLogger.info('Email sent: ' + info.response);
+      simpleLogger.info(infoMessages.EMAIL_SENT + info.response);
     }
   });
 }
