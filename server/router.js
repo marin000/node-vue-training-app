@@ -5,6 +5,7 @@ const logsController = require('./Controllers/logs');
 const reportController = require('./Controllers/reports');
 const employeesValidator = require('./validators/employeesValidator');
 const loggerValidator = require('./validators/loggerValidator');
+const reportValidator = require('./validators/reportValidator');
 const router = express.Router();
 
 router.get('/item', itemController.fetch)
@@ -46,6 +47,8 @@ router.post('/logs',
   loggerValidator.validate('logValidate'),
   logsController.getLogs);
 
-router.post('/report/employee', reportController.employeeReport);
+router.post('/report/employee',
+  reportValidator.validate('employeeReport'),
+  reportController.employeeReport);
 
 module.exports = router;

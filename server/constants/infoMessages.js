@@ -9,5 +9,6 @@ module.exports = {
   GET_LOGS: 'Successfully get all logs.',
   EMPLOYEES_FILLED: 'Employees collection filled.',
   TASKS_FILLED: 'Tasks collection filled.',
-  EMAIL_SENT: 'Email sent:'
+  EMAIL_SENT: 'Email sent:',
+  NEW_REPORT: 'New report created successfully.'
 }
