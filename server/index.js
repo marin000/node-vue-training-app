@@ -34,7 +34,7 @@ const connectionParams = {
 const { CONNECTED, ERROR_CONNECTING } = dbMessages;
 mongoose.connect(config.dbUrl, connectionParams)
   .then(() => {
-    seedingService.seeding();
+    seedingService.seed();
     simpleLogger.info(CONNECTED);
     dbConnectionLogger.info(CONNECTED);
   })

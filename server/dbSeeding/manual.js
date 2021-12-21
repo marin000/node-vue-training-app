@@ -14,7 +14,7 @@ mongoose.connect(config.dbUrl, connectionParams)
   .then(() => {
     simpleLogger.info(CONNECTED);
     dbConnectionLogger.info(CONNECTED);
-    DBseeding();
+    seed();
   })
   .catch((err) => {
     console.error(ERROR_CONNECTING + `\n${err}`);
@@ -28,7 +28,7 @@ async function closeMongoConnection() {
   process.exit();
 } 
   
-async function DBseeding() {
+async function seed() {
   await seedingService.seedEmployees();
   await seedingService.seedTasks();
   await closeMongoConnection();
