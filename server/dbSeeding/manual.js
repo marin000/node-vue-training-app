@@ -1,7 +1,7 @@
 const seedingService = require('../service/seeding');
 const mongoose = require('mongoose');
 const { dbConnectionLogger, simpleLogger } = require('../logger/logger');
-const email = require('../service/email');
+const emailService = require('../service/email');
 const config = require('../config/index');
 const dbMessages = require('../constants/dbMessages');
 const { CONNECTED, DISCONNECTED, ERROR_CONNECTING } = dbMessages;
@@ -19,7 +19,7 @@ mongoose.connect(config.dbUrl, connectionParams)
   .catch((err) => {
     console.error(ERROR_CONNECTING + `\n${err}`);
     dbConnectionLogger.error(ERROR_CONNECTING + `\n${err}`);
-    email.sendEmail(ERROR_CONNECTING + `\n${err}`);
+    emailService.sendEmail(ERROR_CONNECTING + `\n${err}`);
   })
 
 async function closeMongoConnection() {
