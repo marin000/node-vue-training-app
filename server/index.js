@@ -11,6 +11,8 @@ const swaggerOptions = require('./docs/options-config');
 const { dbConnectionLogger, simpleLogger } = require('./logger/logger');
 const emailService = require('./service/email');
 const config = require('./config/index');
+const seedingService= require('./dbSeeding/automatic');
+const dbMessages = require('./constants/dbMessages');
 require('dotenv').config()
 
 const specs = swaggerJsDoc(swaggerOptions.options);
@@ -22,8 +24,6 @@ app.use(cors());
 const router = require('./router');
 app.use(express.json());
 app.use(router);
-
-
 /**
  * DB connection
  */
@@ -31,15 +31,17 @@ const connectionParams = {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }
+const { CONNECTED, ERROR_CONNECTING } = dbMessages;
 mongoose.connect(config.dbUrl, connectionParams)
   .then(() => {
-    simpleLogger.info('Connect to database');
-    dbConnectionLogger.info('Conneted to database');
+    seedingService.seed();
+    simpleLogger.info(CONNECTED);
+    dbConnectionLogger.info(CONNECTED);
   })
   .catch((err) => {
-    console.error(`Error connecting to the database. \n${err}`);
-    dbConnectionLogger.error(`Error connecting to the database. \n${err}`);
-    emailService.sendEmail(`Error connecting to the database. \n${err}`)
+    console.error(ERROR_CONNECTING + `\n${err}`);
+    dbConnectionLogger.error(ERROR_CONNECTING  + `\n${err}`);
+    emailService.sendEmail(ERROR_CONNECTING + `\n${err}`);
   })
 
 /**

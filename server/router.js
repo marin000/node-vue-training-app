@@ -44,5 +44,5 @@ router.get(
 router.post('/logs',
   loggerValidator.validate('logValidate'),
   logsController.getLogs);
-
+  
 module.exports = router;

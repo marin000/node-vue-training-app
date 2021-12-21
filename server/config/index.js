@@ -1,10 +1,11 @@
 require('dotenv').config();
+const errorMessages = require('../constants/errorMessages');
 
 if(!process.env.DB_URL){
-  throw new Error('DB url missing!');
+  throw new Error(errorMessages.DB_URL_MISSING);
 }
 else if(!process.env.MAIL_RECIPIENT){
-  throw new Error('Recipient mail missing!');
+  throw new Error(errorMessages.RECEPIENT_MAIL_MISSING);
 }
 const config = {
   port: process.env.PORT || 4101,

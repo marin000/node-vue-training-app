@@ -6,6 +6,7 @@
   "scripts": {
     "dev:server": "nodemon -r dotenv/config ./server/index.js",
     "dev:client": "vue-cli-service serve",
+    "db:seed": "node ./server/dbSeeding/manual.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -30,7 +31,9 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express-validator": "^6.13.0",
+    "faker": "^5.5.3",
     "moment": "^2.29.1",
+    "mongo-seeding": "^3.7.1",
     "mongoose": "^6.0.12",
     "nodemailer": "^6.7.2",
     "swagger-jsdoc": "^6.1.0",
