@@ -1,6 +1,5 @@
 require('dotenv').config();
 const errorMessages = require('../constants/errorMessages');
-const emailDefault = require('../constants/email');
 
 if(!process.env.DB_URL){
   throw new Error(errorMessages.DB_URL_MISSING);
@@ -14,7 +13,7 @@ const config = {
   mailUsername: process.env.MAIL_USERNAME,
   mailPassword: process.env.MAIL_PASSWORD,
   mailRecipient: process.env.MAIL_RECIPIENT,
-  mailFrom: process.env.MAIL_USERNAME || emailDefault.DEFAULT_EMAIL_FROM,
+  mailFrom: process.env.MAIL_USERNAME || 'test@gmail.com',
   mailConfig: {
     service: process.env.MAIL_USERNAME && process.env.MAIL_PASSWORD ?
       'gmail' : '',
