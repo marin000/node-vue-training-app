@@ -66,4 +66,49 @@ async function employeeReport(req, res) {
   }
 }
 
-module.exports = { employeeReport };
+async function tasksReport(req, res) {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      reportLogger.error(errors);
+      emailService.sendEmail(JSON.stringify(errors.array()));
+      res.status(403).json({ errors: errors.array() });
+      return;
+    }
+    const { id, date } = req.body;
+    const employee = await Employee.findById( id );
+    const tommorow = new Date(date);
+    tommorow.setDate(tommorow.getDate() + 1);
+    const tasks = await Task.find({
+      employee: employee._id,
+      updatedAt: { $gte: new Date(date), $lte: tommorow }
+    });
+    
+    const pdfName = employee.name.replace(' ', '-')
+      .toLowerCase() + `-${date}.pdf`;
+    const employeeReportDir = `${report.REPORTS_PATH}/${employee._id}`;
+
+    ejs.renderFile(report.TASKS_TEMPLATE,
+      { employee: employee, tasks: tasks, date: date }, (err, file) => {
+        if (err) {
+          throw new Error(err);
+        }
+        if (!fs.existsSync(employeeReportDir)) {
+          fs.mkdirSync(employeeReportDir);
+        }
+        wkhtmltopdf(file, {
+          output: `${report.REPORTS_PATH}/${employee._id}/${pdfName}`,
+          pageSize: 'letter'
+        });
+      });
+
+    reportLogger.info(infoMessage.NEW_REPORT);
+    res.json(path.join(__dirname, `../reports/${employee._id}/${pdfName}`));
+  } catch (error) {
+    reportLogger.error(error.message, { metadata: error.stack });
+    emailService.sendEmail(error.message);
+    res.status(500).send(error.message);
+  }
+}
+
+module.exports = { employeeReport, tasksReport };

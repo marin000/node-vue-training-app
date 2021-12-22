@@ -51,4 +51,8 @@ router.post('/report/employee',
   reportValidator.validate('employeeReport'),
   reportController.employeeReport);
 
+router.post('/report/employee/tasks', 
+  reportValidator.validate('tasksReport'),
+  reportController.tasksReport);
+
 module.exports = router;

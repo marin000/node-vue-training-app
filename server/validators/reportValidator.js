@@ -8,5 +8,11 @@ exports.validate = (method) => {
         body('id', message.EMPLOYEE_ID).isMongoId()
       ]
     }
+    case 'tasksReport': {
+      return [
+        body('id', message.EMPLOYEE_ID).isMongoId(),
+        body('date', message.DATE_VALID).isISO8601()
+      ]
+    }
   }
 }

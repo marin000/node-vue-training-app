@@ -1,0 +1,84 @@
+<html>
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <style>
+    .tasks-report {
+      max-width: 800px;
+      height: 400px;
+      margin: auto;
+      padding: 30px;
+      border: 1px solid #eee;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+      font-size: 16px;
+      line-height: 24px;
+      font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+      color: #555;
+    }
+
+    .tasks-report .tasks-report-title {
+      text-align: center;
+    }
+
+    .tasks-report .tasks {
+      margin: 0 auto;
+    }
+
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
+    .tasks-report .tasks .tasks-table-title {
+      font-weight: bold;
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tasks-report">
+    <div class="tasks-report-title">
+      <h1>Agilathon To-Do Application report</h1>
+      <h4>Date: <%= date %> </h4><br>
+    </div>
+    <div class="tasks">
+      <h3 class="tasks-table-title">
+        <%= employee.name %> list of tasks
+      </h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Task ID</th>
+            <th>Name</th>
+            <th>Deadline</th>
+            <th>Completed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% tasks.forEach(task => { %>
+            <tr>
+              <td><%= task._id %></td>
+              <td><%= task.name %></td>
+              <td><%= task.deadline %></td>
+              <td><%= task.completed %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>
