@@ -21,7 +21,7 @@ async function employeeReport(req, res) {
       return;
     }
 
-    const employee = await Employee.findOne({ name: req.body.name });
+    const employee = await Employee.findById(req.body.id );
     const currentDate = new Date();
     const yearAgo = new Date(new Date().setFullYear(new Date()
       .getFullYear() - 1));
@@ -29,7 +29,7 @@ async function employeeReport(req, res) {
       employee: employee._id,
       createdAt: { $gte: yearAgo, $lte: currentDate }
     });
-    const tasksCompleted = tasks.filter(task => task.completed === true);
+    const tasksCompleted = tasks.filter(task => task.completed);
     const today = moment().format('YYYY-MM-DD');
     const tasksExpired = tasks.filter(task => moment(today)
       .isAfter(task.deadline));
@@ -41,14 +41,15 @@ async function employeeReport(req, res) {
       completed: tasksCompleted.length,
       expired: tasksExpired.length
     };
+    const employeeReportDir = `${report.REPORTS_PATH}/${employee._id}`;
 
     ejs.renderFile(report.EMPLOYEE_TEMPLATE,
       { employee: employee, taskInfo: taskInfo }, (err, file) => {
         if (err) {
           throw new Error(err);
         }
-        if (!fs.existsSync(`${report.REPORTS_PATH}/${employee._id}`)) {
-          fs.mkdirSync(`${report.REPORTS_PATH}/${employee._id}`);
+        if (!fs.existsSync(employeeReportDir)) {
+          fs.mkdirSync(employeeReportDir);
         }
         wkhtmltopdf(file, {
           output: `${report.REPORTS_PATH}/${employee._id}/${pdfName}`,
