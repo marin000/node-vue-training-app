@@ -4,6 +4,8 @@ const { validationResult } = require('express-validator');
 const { employeeLogger, taskLogger } = require('../logger/logger');
 const infoMessage = require('../constants/infoMessages');
 const emailService = require('../service/email');
+const fs = require('fs');
+const report = require('../constants/report');
 
 async function create(req, res, next) {
   try {
@@ -46,10 +48,13 @@ async function deleteEmployee(req, res) {
       res.status(403).json({ errors: errors.array() });
       return;
     }
-    await Task.deleteMany({ employee: req.params.id });
-    await Employee.findByIdAndDelete(req.params.id);
+    const employeeId = req.params.id;
+    fs.rmSync(`${report.REPORTS_PATH}/${employeeId}`,
+     { recursive: true, force: true });
+    await Task.deleteMany({ employee: employeeId });
+    await Employee.findByIdAndDelete(employeeId);
     employeeLogger.info(infoMessage.DELETE_EMPLOYEE);
-    res.status(204).send('Employee deleted successfully');
+    res.status(204).send(infoMessage.DELETE_EMPLOYEE);
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
     emailService.sendEmail(error.message);
@@ -89,7 +94,7 @@ async function deleteTask(req, res) {
     }
     await Task.findByIdAndDelete(req.params.taskId);
     taskLogger.info(infoMessage.DELETE_TASK);
-    res.status(204).send('Task deleted successfully.');
+    res.status(204).send(infoMessage.DELETE_TASK);
   } catch (error) {
     taskLogger.error(error.message, { metadata: error.stack });
     emailService.sendEmail(error.message);

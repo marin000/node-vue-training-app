@@ -60,8 +60,7 @@
       <table>
         <thead>
           <tr>
-            <th>Task ID</th>
-            <th>Name</th>
+            <th>Task description</th>
             <th>Deadline</th>
             <th>Completed</th>
           </tr>
@@ -69,10 +68,13 @@
         <tbody>
           <% tasks.forEach(task => { %>
             <tr>
-              <td><%= task._id %></td>
               <td><%= task.name %></td>
               <td><%= task.deadline %></td>
-              <td><%= task.completed %></td>
+              <% if(task.completed) {%> 
+                <td>YES</td>
+              <% } else { %> 
+                <td>NO</td>
+              <% } %> 
             </tr>
           <% }); %>
         </tbody>

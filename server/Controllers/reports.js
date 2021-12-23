@@ -52,13 +52,13 @@ async function employeeReport(req, res) {
           fs.mkdirSync(employeeReportDir);
         }
         wkhtmltopdf(file, {
-          output: `${report.REPORTS_PATH}/${employee._id}/${pdfName}`,
+          output: `${employeeReportDir}/${pdfName}`,
           pageSize: 'letter'
         });
       });
 
     reportLogger.info(infoMessage.NEW_REPORT);
-    res.json(path.join(__dirname, `../reports/${employee._id}/${pdfName}`));
+    res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));
   } catch (error) {
     reportLogger.error(error.message, { metadata: error.stack });
     emailService.sendEmail(error.message);
@@ -97,13 +97,13 @@ async function tasksReport(req, res) {
           fs.mkdirSync(employeeReportDir);
         }
         wkhtmltopdf(file, {
-          output: `${report.REPORTS_PATH}/${employee._id}/${pdfName}`,
+          output: `${employeeReportDir}/${pdfName}`,
           pageSize: 'letter'
         });
       });
 
     reportLogger.info(infoMessage.NEW_REPORT);
-    res.json(path.join(__dirname, `../reports/${employee._id}/${pdfName}`));
+    res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));
   } catch (error) {
     reportLogger.error(error.message, { metadata: error.stack });
     emailService.sendEmail(error.message);
