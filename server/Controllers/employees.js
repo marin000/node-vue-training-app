@@ -54,7 +54,7 @@ async function deleteEmployee(req, res) {
     await Task.deleteMany({ employee: employeeId });
     await Employee.findByIdAndDelete(employeeId);
     employeeLogger.info(infoMessage.DELETE_EMPLOYEE);
-    res.status(204).send(infoMessage.DELETE_EMPLOYEE);
+    res.status(204);
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
     emailService.sendEmail(error.message);
@@ -94,7 +94,7 @@ async function deleteTask(req, res) {
     }
     await Task.findByIdAndDelete(req.params.taskId);
     taskLogger.info(infoMessage.DELETE_TASK);
-    res.status(204).send(infoMessage.DELETE_TASK);
+    res.status(204);
   } catch (error) {
     taskLogger.error(error.message, { metadata: error.stack });
     emailService.sendEmail(error.message);
