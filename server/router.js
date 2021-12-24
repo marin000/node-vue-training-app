@@ -49,10 +49,10 @@ router.post('/logs',
 
 router.post('/report/employee',
   reportValidator.validate('employeeReport'),
-  reportController.employeeReport);
+  reportController.createEmployeeReport);
 
 router.post('/report/employee/tasks', 
   reportValidator.validate('tasksReport'),
-  reportController.tasksReport);
+  reportController.createTasksReport);
 
 module.exports = router;

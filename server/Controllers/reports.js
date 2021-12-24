@@ -6,10 +6,9 @@ const emailService = require('../service/email');
 const infoMessage = require('../constants/infoMessages');
 const reportService = require('../service/report');
 const { reportLogger } = require('../logger/logger');
-const moment = require('moment');
 const path = require('path');
 
-async function employeeReport(req, res) {
+async function createEmployeeReport(req, res) {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -28,9 +27,7 @@ async function employeeReport(req, res) {
       createdAt: { $gte: yearAgo, $lte: currentDate }
     });
     const tasksCompleted = tasks.filter(task => task.completed);
-    const today = moment().format('YYYY-MM-DD');
-    const tasksExpired = tasks.filter(task => moment(today)
-      .isAfter(task.deadline));
+    const tasksExpired = tasks.filter(task => task.isExpired);
     const pdfName = employee.name.replace(' ', '-')
       .toLowerCase() + report.FILE_NAME_EXT;
 
@@ -41,12 +38,11 @@ async function employeeReport(req, res) {
         total: tasks.length,
         completed: tasksCompleted.length,
         expired: tasksExpired.length
-      },
-      employeeReportDir,
-      pdfName
+      }
     };
 
-    reportService.generateEmployeeReport(data);
+    await reportService.generateReport(data, report.EMPLOYEE_TEMPLATE, 
+      employeeReportDir, pdfName);
     reportLogger.info(infoMessage.NEW_REPORT);
     res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));
   } catch (error) {
@@ -56,7 +52,7 @@ async function employeeReport(req, res) {
   }
 }
 
-async function tasksReport(req, res) {
+async function createTasksReport(req, res) {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -80,12 +76,11 @@ async function tasksReport(req, res) {
     const data = {
       employee,
       tasks,
-      date,
-      employeeReportDir,
-      pdfName
+      date
     };
 
-    reportService.generateTasksReport(data);
+    await reportService.generateReport(data, report.TASKS_TEMPLATE, 
+      employeeReportDir, pdfName);
     reportLogger.info(infoMessage.NEW_REPORT);
     res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));
   } catch (error) {
@@ -95,4 +90,4 @@ async function tasksReport(req, res) {
   }
 }
 
-module.exports = { employeeReport, tasksReport };
+module.exports = { createEmployeeReport, createTasksReport };

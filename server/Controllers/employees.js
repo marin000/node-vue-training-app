@@ -7,6 +7,12 @@ const emailService = require('../service/email');
 const fs = require('fs');
 const report = require('../constants/report');
 
+
+function deleteEmployeeDir(employeeId) {
+  const options = { recursive: true, force: true };
+  fs.rmSync(`${report.REPORTS_PATH}/${employeeId}`, options);
+}
+
 async function create(req, res, next) {
   try {
     const errors = validationResult(req);
@@ -49,12 +55,11 @@ async function deleteEmployee(req, res) {
       return;
     }
     const employeeId = req.params.id;
-    fs.rmSync(`${report.REPORTS_PATH}/${employeeId}`,
-     { recursive: true, force: true });
+    deleteEmployeeDir(employeeId);
     await Task.deleteMany({ employee: employeeId });
     await Employee.findByIdAndDelete(employeeId);
     employeeLogger.info(infoMessage.DELETE_EMPLOYEE);
-    res.status(204);
+    res.status(204).send();
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
     emailService.sendEmail(error.message);
@@ -94,7 +99,7 @@ async function deleteTask(req, res) {
     }
     await Task.findByIdAndDelete(req.params.taskId);
     taskLogger.info(infoMessage.DELETE_TASK);
-    res.status(204);
+    res.status(204).send();
   } catch (error) {
     taskLogger.error(error.message, { metadata: error.stack });
     emailService.sendEmail(error.message);

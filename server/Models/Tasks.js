@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const moment = require('moment');
 const TasksShema = new mongoose.Schema({
   name: {
     type: String,
@@ -14,5 +14,10 @@ const TasksShema = new mongoose.Schema({
     }
 }, { timestamps: true }
 );
+
+TasksShema.virtual('isExpired').get(function() {
+  const today = moment().format('YYYY-MM-DD');
+  return moment(today).isAfter(this.deadline);
+});
 
 module.exports = mongoose.model('Tasks', TasksShema); 
