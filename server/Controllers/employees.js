@@ -7,7 +7,6 @@ const emailService = require('../service/email');
 const fs = require('fs');
 const report = require('../constants/report');
 
-
 function deleteEmployeeDir(employeeId) {
   const options = { recursive: true, force: true };
   fs.rmSync(`${report.REPORTS_PATH}/${employeeId}`, options);
