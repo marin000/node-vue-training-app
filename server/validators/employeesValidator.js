@@ -6,8 +6,8 @@ exports.validate = (method) => {
     case 'create': {
       return [
         body('name', message.NAME_SHORT).isLength({ min: 2 }),
-        body('name', message.NAME_LONG).isLength({ max: 20 }),
-        body('name', message.NAME_CONTAIN_NUM).isAlpha()
+        body('name', message.NAME_LONG).isLength({ max: 40 }),
+        body('name', message.NAME_CONTAIN_NUM).isAlpha('en-US', {ignore: ' '})
       ]
     }
     case 'createTask': {

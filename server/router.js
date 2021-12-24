@@ -2,8 +2,10 @@ const express = require("express");
 const itemController = require('./Controllers/items');
 const employeesController = require('./Controllers/employees');
 const logsController = require('./Controllers/logs');
+const reportController = require('./Controllers/reports');
 const employeesValidator = require('./validators/employeesValidator');
 const loggerValidator = require('./validators/loggerValidator');
+const reportValidator = require('./validators/reportValidator');
 const router = express.Router();
 
 router.get('/item', itemController.fetch)
@@ -44,5 +46,13 @@ router.get(
 router.post('/logs',
   loggerValidator.validate('logValidate'),
   logsController.getLogs);
-  
+
+router.post('/report/employee',
+  reportValidator.validate('employeeReport'),
+  reportController.createEmployeeReport);
+
+router.post('/report/employee/tasks', 
+  reportValidator.validate('tasksReport'),
+  reportController.createTasksReport);
+
 module.exports = router;

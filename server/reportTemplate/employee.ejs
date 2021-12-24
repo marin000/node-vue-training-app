@@ -1,0 +1,60 @@
+<html>
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <style>
+    .employee-report {
+      max-width: 800px;
+      height: 400px;
+      margin: auto;
+      padding: 30px;
+      border: 1px solid #eee;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+      font-size: 16px;
+      line-height: 24px;
+      font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+      color: #555;
+    }
+    .employee-report .employee-report-title {
+      text-align: center;
+    }
+    .employee-report .employee-info {
+      float: left;
+    }
+    .employee-report .task-info {
+      float: right;
+      margin-right: 50px;
+    }
+    .employee-report .employee-info .employee-detail {
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="employee-report">
+    <div class="employee-report-title">
+      <h1>Agilathon To-Do Application report</h1>
+      <h4>(Last year report)</h4><br>
+    </div>
+    <div class="employee-info">
+      <table>
+        <tr><div class="employee-detail">Name: </div><%= employee.name %></tr>
+        <tr><div class="employee-detail">Email: </div><%= employee.email %></tr>
+        <tr><div class="employee-detail">Phone: </div><%= employee.phone %></tr>
+        <tr><div class="employee-detail">Age: </div><%= employee.age %></tr>
+        <tr><div class="employee-detail">Pet: </div><%= employee.pet %></tr>
+      </table>
+    </div>
+    <div class="task-info">
+      <h3>Task details</h3>
+      <table>
+        <tr>Total: <%= taskInfo.total %></tr><br>
+        <tr>Completed: <%= taskInfo.completed %></tr><br>
+        <tr>Expired: <%= taskInfo.expired %></tr>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>

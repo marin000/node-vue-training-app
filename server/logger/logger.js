@@ -64,6 +64,13 @@ const logsLogger = createLogger({
   transports: loggerTransports
 });
 
+const reportLogger = createLogger({
+  levels: customLevels.levels,
+  defaultMeta: { component: 'report' },
+  format: loggerFormat,
+  transports: loggerTransports
+});
+
 const simpleFormat = printf(({ level, message, timestamp }) => {
   return `${timestamp} ${level}: ${message}`;
 });
@@ -85,5 +92,6 @@ module.exports = {
   employeeLogger: employeeLogger,
   taskLogger: taskLogger,
   logsLogger: logsLogger,
+  reportLogger: reportLogger,
   simpleLogger: simpleLogger
 };
