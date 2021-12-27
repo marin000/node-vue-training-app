@@ -5,15 +5,35 @@ const { CRONJOB_MESSAGE, CRONJOB_SUBJECT } = emailDefault;
 const reportService = require('../service/report');
 const Employee = require('../Models/Employees');
 const Task = require('../Models/Tasks');
-
+const Promise = require("bluebird");
+const moment = require('moment');
+const report = require('../constants/report');
+const taskHelper = require('../utils/taskReportHelper');
+const { simpleLogger } = require('../logger/logger');
+const infoMessage = require('../constants/infoMessages');
 
 function sendReport() {
   cron.schedule('0 3 * * *', async () => {
     const employees = await Employee.find();
-    const yesterday = new Date();
+    const today = new Date((new Date().setUTCHours(0, 0, 0, 0)));
+    const yesterday = new Date((new Date().setUTCHours(0, 0, 0, 0)));
     yesterday.setDate(yesterday.getDate() - 1);
+    const date = moment(yesterday).format("YYYY-MM-DD");
 
-    
+    Promise.each(employees, async function (employee) {
+      return Task.find({
+        employee: employee._id,
+        updatedAt: { $gte: yesterday, $lte: today }
+      }).then(function (tasks) {
+        const { data, employeeReportDir, pdfName } =
+          taskHelper.taskReportHelp(employee, tasks, date);
+        reportService.generateReport(data, report.TASKS_TEMPLATE,
+          employeeReportDir, pdfName);
+          //send email
+      });
+    }).then(function () {
+      simpleLogger.info(infoMessage.CRONJOB_SEND_REPORTS);
+    });
   });
 }
 

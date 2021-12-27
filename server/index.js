@@ -13,6 +13,7 @@ const emailService = require('./service/email');
 const config = require('./config/index');
 const seedingService= require('./dbSeeding/automatic');
 const dbMessages = require('./constants/dbMessages');
+const cronjob = require('./cronjobs/report');
 require('dotenv').config()
 
 const specs = swaggerJsDoc(swaggerOptions.options);
@@ -45,6 +46,10 @@ mongoose.connect(config.dbUrl, connectionParams)
     emailService.sendEmail(ERROR_CONNECTING + `\n${err}`);
   })
 
+/**
+ * Cronjobs
+ */
+cronjob.sendReport();
 /**
  * Server Activation
  */

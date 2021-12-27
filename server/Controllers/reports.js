@@ -5,6 +5,7 @@ const { validationResult } = require('express-validator');
 const emailService = require('../service/email');
 const infoMessage = require('../constants/infoMessages');
 const reportService = require('../service/report');
+const taskHelper = require('../utils/taskReportHelper');
 const { reportLogger } = require('../logger/logger');
 const path = require('path');
 
@@ -70,14 +71,8 @@ async function createTasksReport(req, res) {
       updatedAt: { $gte: new Date(date), $lte: tommorow }
     });
 
-    const pdfName = employee.name.replace(' ', '-')
-      .toLowerCase() + `-${date}.pdf`;
-    const employeeReportDir = `${report.REPORTS_PATH}/${employee._id}`;
-    const data = {
-      employee,
-      tasks,
-      date
-    };
+    const { data, employeeReportDir, pdfName} = 
+      taskHelper.taskReportHelp(employee, tasks, date);
 
     await reportService.generateReport(data, report.TASKS_TEMPLATE, 
       employeeReportDir, pdfName);
