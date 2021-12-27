@@ -47,12 +47,9 @@ mongoose.connect(config.dbUrl, connectionParams)
   })
 
 /**
- * Cronjobs
- */
-cronjob.sendReport();
-/**
  * Server Activation
  */
 app.listen(port, () => {
   console.log(`Listening to requests on http://localhost:${port}`);
+  cronjob.sendReport();
 });

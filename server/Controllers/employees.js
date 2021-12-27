@@ -21,7 +21,7 @@ async function create(req, res, next) {
       res.status(403).json({ errors: errors.array() });
       return;
     }
-    const newEmployee = Employee(req.body);
+    const newEmployee = Employee('req.body');
     await newEmployee.save();
     employeeLogger.info(infoMessage.NEW_EMPLOYEE);
     res.status(201).send(newEmployee);

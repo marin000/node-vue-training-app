@@ -14,7 +14,9 @@ const EmployeesShema = new mongoose.Schema({
   },
   phone: String,
   age: Number,
-  pet: String
+  pet: String,
+  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tasks' }] 
+
 }, {timestamps: true }
 );
 

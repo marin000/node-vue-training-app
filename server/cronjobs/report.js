@@ -11,11 +11,14 @@ const report = require('../constants/report');
 const taskHelper = require('../utils/taskReportHelper');
 const { simpleLogger } = require('../logger/logger');
 const infoMessage = require('../constants/infoMessages');
+const path = require('path');
+const cronSchedule = require('../constants/cronjob');
 
 function sendReport() {
-  cron.schedule('0 3 * * *', async () => {
-    const employees = await Employee.find();
-    const today = new Date((new Date().setUTCHours(0, 0, 0, 0)));
+  cron.schedule(cronSchedule.DAILY_3AM, async () => {
+    const employees = await Employee.find().limit(1).populate('tasks');
+    console.log(employees)
+    /*const today = new Date((new Date().setUTCHours(0, 0, 0, 0)));
     const yesterday = new Date((new Date().setUTCHours(0, 0, 0, 0)));
     yesterday.setDate(yesterday.getDate() - 1);
     const date = moment(yesterday).format("YYYY-MM-DD");
@@ -25,15 +28,19 @@ function sendReport() {
         employee: employee._id,
         updatedAt: { $gte: yesterday, $lte: today }
       }).then(function (tasks) {
-        const { data, employeeReportDir, pdfName } =
-          taskHelper.taskReportHelp(employee, tasks, date);
-        reportService.generateReport(data, report.TASKS_TEMPLATE,
+        const { tempContext, employeeReportDir, pdfName } =
+          taskHelper.createTaskReportData(employee, tasks, date);
+        reportService.generateReport(tempContext, report.TASKS_TEMPLATE,
           employeeReportDir, pdfName);
-          //send email
+
+          const reportPath = (path.join(__dirname, 
+            `../.${employeeReportDir}/${pdfName}`));
+          emailService.sendEmail(CRONJOB_MESSAGE, CRONJOB_SUBJECT + date, 
+            pdfName, reportPath );
       });
     }).then(function () {
       simpleLogger.info(infoMessage.CRONJOB_SEND_REPORTS);
-    });
+    });*/
   });
 }
 

@@ -1,15 +1,15 @@
 const report = require('../constants/report');
 
-function taskReportHelp(employee, tasks, date) {
+function createTaskReportData(employee, tasks, date) {
   const pdfName = employee.name.replace(' ', '-')
     .toLowerCase() + `-${date}.pdf`;
   const employeeReportDir = `${report.REPORTS_PATH}/${employee._id}`;
-  const data = {
+  const tempContext = {
     employee,
     tasks,
     date
   };
-  return { data, employeeReportDir, pdfName };
+  return { tempContext, employeeReportDir, pdfName };
 }
 
-module.exports = { taskReportHelp }
+module.exports = { createTaskReportData }

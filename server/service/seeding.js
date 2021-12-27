@@ -18,15 +18,17 @@ async function seedEmployees() {
 
 async function seedTasks() {
   const employeesIds = await Employee.find().distinct('_id');
-  const tasks = [];
+  //const tasks = [];
   employeesIds.forEach(employeeId => {
     const randTaskNum = randNumber.getRandomNumber(TASKS_MIN, TASKS_MAX);
     for (let i = 0; i < randTaskNum; i++) {
-      const newTask = dataGenerator.createTask(employeeId);
-      tasks.push(newTask);
+      //const newTask = 
+      dataGenerator.createTask(employeeId);
+      //tasks.push(newTask);
     }
   });
-  await Task.insertMany(tasks);
+  //await Task.deleteMany({});
+  //await Task.insertMany(tasks);
   simpleLogger.info(infoMessages.TASKS_FILLED);
 }
 module.exports = { seedEmployees, seedTasks }

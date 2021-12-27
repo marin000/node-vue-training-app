@@ -71,10 +71,10 @@ async function createTasksReport(req, res) {
       updatedAt: { $gte: new Date(date), $lte: tommorow }
     });
 
-    const { data, employeeReportDir, pdfName} = 
-      taskHelper.taskReportHelp(employee, tasks, date);
+    const { tempContext, employeeReportDir, pdfName} = 
+      taskHelper.createTaskReportData(employee, tasks, date);
 
-    await reportService.generateReport(data, report.TASKS_TEMPLATE, 
+    await reportService.generateReport(tempContext, report.TASKS_TEMPLATE, 
       employeeReportDir, pdfName);
     reportLogger.info(infoMessage.NEW_REPORT);
     res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));

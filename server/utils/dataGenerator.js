@@ -1,5 +1,6 @@
 const faker = require('faker');
 const moment = require('moment');
+const Task = require('../Models/Tasks');
 
 function createEmployee() {
   const firstName = faker.name.firstName();
@@ -14,14 +15,15 @@ function createEmployee() {
   return newEmployee;
 }
 
-function createTask(employeeId) {
+async function createTask(employeeId) {
   const deadline = moment(faker.date.soon()).format('YYYY-MM-DD')
-  const newTask = {
+  const newTask = Task({
     name: faker.lorem.word(),
     deadline,
     completed: false,
     employee: employeeId
-  }
-  return newTask;
+  });
+  await newTask.save();
+  
 }
 module.exports = { createEmployee, createTask };
