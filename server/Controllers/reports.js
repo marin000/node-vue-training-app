@@ -14,7 +14,7 @@ async function createEmployeeReport(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       reportLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -48,7 +48,7 @@ async function createEmployeeReport(req, res) {
     res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));
   } catch (error) {
     reportLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     res.status(500).send(error.message);
   }
 }
@@ -58,7 +58,7 @@ async function createTasksReport(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       reportLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -80,7 +80,7 @@ async function createTasksReport(req, res) {
     res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));
   } catch (error) {
     reportLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     res.status(500).send(error.message);
   }
 }

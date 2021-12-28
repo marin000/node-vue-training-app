@@ -4,8 +4,6 @@ const emailDefault = require('../constants/email');
 const { CRONJOB_MESSAGE, CRONJOB_SUBJECT } = emailDefault;
 const reportService = require('../service/report');
 const Employee = require('../Models/Employees');
-const Task = require('../Models/Tasks');
-const Promise = require("bluebird");
 const moment = require('moment');
 const report = require('../constants/report');
 const taskHelper = require('../utils/taskReportHelper');
@@ -13,35 +11,60 @@ const { simpleLogger } = require('../logger/logger');
 const infoMessage = require('../constants/infoMessages');
 const path = require('path');
 const cronSchedule = require('../constants/cronjob');
+const fs = require('fs');
 
 function sendReport() {
   cron.schedule(cronSchedule.DAILY_3AM, async () => {
-    const employees = await Employee.find().limit(1).populate('tasks');
-    console.log(employees)
-    /*const today = new Date((new Date().setUTCHours(0, 0, 0, 0)));
-    const yesterday = new Date((new Date().setUTCHours(0, 0, 0, 0)));
-    yesterday.setDate(yesterday.getDate() - 1);
-    const date = moment(yesterday).format("YYYY-MM-DD");
+    const employees = await Employee.find().populate('tasks');
+    const yesterday = moment().add(-1, 'days').format('YYYY-MM-DD');
 
-    Promise.each(employees, async function (employee) {
-      return Task.find({
-        employee: employee._id,
-        updatedAt: { $gte: yesterday, $lte: today }
-      }).then(function (tasks) {
-        const { tempContext, employeeReportDir, pdfName } =
-          taskHelper.createTaskReportData(employee, tasks, date);
-        reportService.generateReport(tempContext, report.TASKS_TEMPLATE,
-          employeeReportDir, pdfName);
-
-          const reportPath = (path.join(__dirname, 
-            `../.${employeeReportDir}/${pdfName}`));
-          emailService.sendEmail(CRONJOB_MESSAGE, CRONJOB_SUBJECT + date, 
-            pdfName, reportPath );
+    employees.forEach(employee => {
+      const yesterdayTasks = [];
+      employee.tasks.forEach(task => {
+        const taskDate = moment(task.updatedAt).format('YYYY-MM-DD');
+        if (moment(yesterday).isSame(taskDate)) {
+          yesterdayTasks.push(task);
+        }
       });
-    }).then(function () {
-      simpleLogger.info(infoMessage.CRONJOB_SEND_REPORTS);
-    });*/
+      const { tempContext, employeeReportDir, pdfName } =
+        taskHelper.createTaskReportData(employee, yesterdayTasks, yesterday);
+      reportService.generateReport(tempContext, report.TASKS_TEMPLATE,
+        employeeReportDir, pdfName);
+      const reportPath = (path.join(__dirname,
+        `../.${employeeReportDir}/${pdfName}`));
+      const emailData = {
+        emailMessage: CRONJOB_MESSAGE,
+        emailSubject: CRONJOB_SUBJECT + yesterday,
+        attachmentName: pdfName,
+        attachmentPath: reportPath
+      };
+      emailService.sendEmail(emailData);
+    });
+    simpleLogger.info(infoMessage.CRONJOB_SEND_REPORTS);
   });
 }
 
-module.exports = { sendReport }
+function deleteReport() {
+  cron.schedule(cronSchedule.DAILY_4AM, async () => {
+    fs.readdir(report.REPORTS_PATH, (err, dirs) => {
+      dirs.forEach(dir => {
+        if (dir !== report.HIDDEN_FILE) {
+          const reportDir = `${report.REPORTS_PATH}/${dir}`;
+          fs.readdir(reportDir, (err, files) => {
+            files.forEach(file => {
+              const filePath = `${reportDir}/${file}`;
+              const { birthtime } = fs.statSync(filePath);
+              const oldDate = moment().add(-5, 'days');
+              if (moment(birthtime).isBefore(moment(oldDate))) {
+                fs.rmSync(filePath);
+                simpleLogger.info(infoMessage.FILE_DELETED);
+              }
+            });
+          });
+        }
+      });
+    });
+  });
+}
+
+module.exports = { sendReport, deleteReport }

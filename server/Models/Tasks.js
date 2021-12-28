@@ -22,14 +22,6 @@ TasksShema.virtual('isExpired').get(function() {
   return moment(today).isAfter(this.deadline);
 });
 
-TasksShema.pre('remove', function(next) {
-  Employee.findById(this.employee).exec((error, item) => {
-    var index = item.tasks.indexOf(item.tasks.find(e => e._id == this._id));
-    item.tasks.splice(index, 1);
-    item.save(() => { next(); });
-  });
-});
-
 TasksShema.pre('save', function(next) {
   Employee.findById(this.employee).exec((error, item) => {
     item.tasks.push(this);

@@ -17,17 +17,17 @@ async function create(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       employeeLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
-    const newEmployee = Employee('req.body');
+    const newEmployee = Employee(req.body);
     await newEmployee.save();
     employeeLogger.info(infoMessage.NEW_EMPLOYEE);
     res.status(201).send(newEmployee);
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     return next(error);
   }
 }
@@ -39,7 +39,7 @@ async function fetch(req, res) {
     res.json(data);
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     res.status(500).send(error.message);
   }
 }
@@ -49,7 +49,7 @@ async function deleteEmployee(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       employeeLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -61,7 +61,7 @@ async function deleteEmployee(req, res) {
     res.status(204).send();
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     res.status(500).send(error.message);
   }
 }
@@ -71,7 +71,7 @@ async function createTask(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       taskLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -82,7 +82,7 @@ async function createTask(req, res, next) {
     res.status(201).send(newTask);
   } catch (error) {
     taskLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     return next(error);
   }
 }
@@ -92,16 +92,21 @@ async function deleteTask(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       taskLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
-    await Task.findByIdAndDelete(req.params.taskId);
+    const task = await Task.findById(req.params.taskId);
+    const employee = await Employee.findById(task.employee);
+    const index = employee.tasks.indexOf(task._id);
+    employee.tasks.splice(index, 1);
+    await Employee.findByIdAndUpdate( employee._id, { tasks: employee.tasks });
+    await Task.findByIdAndDelete(task._id);
     taskLogger.info(infoMessage.DELETE_TASK);
     res.status(204).send();
   } catch (error) {
     taskLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     res.status(500).send(error.message);
   }
 }
@@ -111,7 +116,7 @@ async function updateTask(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       taskLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -122,7 +127,7 @@ async function updateTask(req, res) {
     res.json(updatedTask);
   } catch (error) {
     taskLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     res.status(500).send(error.message);
   }
 }
@@ -132,7 +137,7 @@ async function getEmployeeTasks(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       employeeLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -141,7 +146,7 @@ async function getEmployeeTasks(req, res) {
     res.json(tasks);
   } catch (error) {
     employeeLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     res.status(500).send(error.message);
   }
 }
