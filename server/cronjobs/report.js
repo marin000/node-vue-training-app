@@ -12,6 +12,7 @@ const infoMessage = require('../constants/infoMessages');
 const path = require('path');
 const cronSchedule = require('../constants/cronjob');
 const fs = require('fs');
+const Report = require('../Models/Reports');
 
 function sendReport() {
   cron.schedule(cronSchedule.DAILY_3AM, async () => {
@@ -28,8 +29,14 @@ function sendReport() {
       });
       const { tempContext, employeeReportDir, pdfName } =
         taskHelper.createTaskReportData(employee, yesterdayTasks, yesterday);
-      reportService.generateReport(tempContext, report.TASKS_TEMPLATE,
-        employeeReportDir, pdfName);
+
+      const options = {
+        data: tempContext,
+        template: report.TASKS_TEMPLATE,
+        reportDir: employeeReportDir,
+        pdfName
+      };
+      reportService.generateReport(options);
       const reportPath = (path.join(__dirname,
         `../.${employeeReportDir}/${pdfName}`));
       const emailData = {
@@ -46,23 +53,14 @@ function sendReport() {
 
 function deleteReport() {
   cron.schedule(cronSchedule.DAILY_4AM, async () => {
-    fs.readdir(report.REPORTS_PATH, (err, dirs) => {
-      dirs.forEach(dir => {
-        if (dir !== report.HIDDEN_FILE) {
-          const reportDir = `${report.REPORTS_PATH}/${dir}`;
-          fs.readdir(reportDir, (err, files) => {
-            files.forEach(file => {
-              const filePath = `${reportDir}/${file}`;
-              const { birthtime } = fs.statSync(filePath);
-              const oldDate = moment().add(-5, 'days');
-              if (moment(birthtime).isBefore(moment(oldDate))) {
-                fs.rmSync(filePath);
-                simpleLogger.info(infoMessage.FILE_DELETED);
-              }
-            });
-          });
-        }
-      });
+    const reports = await Report.find();
+    const oldDate = moment().add(-5, 'days');
+    reports.forEach(async (report) => {
+      if (moment(report.createdAt).isBefore(moment(oldDate))) {
+        fs.rmSync(report.path);
+        await Report.findByIdAndDelete(report._id);
+        simpleLogger.info(infoMessage.FILE_DELETED);
+      }
     });
   });
 }

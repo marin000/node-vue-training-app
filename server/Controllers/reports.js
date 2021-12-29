@@ -41,9 +41,13 @@ async function createEmployeeReport(req, res) {
         expired: tasksExpired.length
       }
     };
-
-    await reportService.generateReport(data, report.EMPLOYEE_TEMPLATE, 
-      employeeReportDir, pdfName);
+    const options = {
+      data,
+      template: report.EMPLOYEE_TEMPLATE,
+      reportDir: employeeReportDir,
+      pdfName
+    };
+    await reportService.generateReport(options);
     reportLogger.info(infoMessage.NEW_REPORT);
     res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));
   } catch (error) {
@@ -74,8 +78,13 @@ async function createTasksReport(req, res) {
     const { tempContext, employeeReportDir, pdfName} = 
       taskHelper.createTaskReportData(employee, tasks, date);
 
-    await reportService.generateReport(tempContext, report.TASKS_TEMPLATE, 
-      employeeReportDir, pdfName);
+    const options = {
+      data: tempContext,
+      template: report.TASKS_TEMPLATE,
+      reportDir: employeeReportDir,
+      pdfName
+    };
+    await reportService.generateReport(options);
     reportLogger.info(infoMessage.NEW_REPORT);
     res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));
   } catch (error) {
