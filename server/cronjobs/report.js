@@ -4,7 +4,7 @@ const emailDefault = require('../constants/email');
 const { CRONJOB_MESSAGE, CRONJOB_SUBJECT } = emailDefault;
 const reportService = require('../service/report');
 const Employee = require('../Models/Employees');
-const moment = require('moment');
+const dayjs = require('dayjs');
 const report = require('../constants/report');
 const taskHelper = require('../utils/taskReportHelper');
 const { simpleLogger } = require('../logger/logger');
@@ -17,13 +17,13 @@ const Report = require('../Models/Reports');
 function sendReport() {
   cron.schedule(cronSchedule.DAILY_3AM, async () => {
     const employees = await Employee.find().populate('tasks');
-    const yesterday = moment().add(-1, 'days').format('YYYY-MM-DD');
+    const yesterday = dayjs().add(-1, 'day').format('YYYY-MM-DD');
 
     employees.forEach(employee => {
       const yesterdayTasks = [];
       employee.tasks.forEach(task => {
-        const taskDate = moment(task.updatedAt).format('YYYY-MM-DD');
-        if (moment(yesterday).isSame(taskDate)) {
+        const taskDate = dayjs(task.updatedAt).format('YYYY-MM-DD');
+        if (dayjs(yesterday).isSame(taskDate)) {
           yesterdayTasks.push(task);
         }
       });
@@ -54,9 +54,9 @@ function sendReport() {
 function deleteReport() {
   cron.schedule(cronSchedule.DAILY_4AM, async () => {
     const reports = await Report.find();
-    const oldDate = moment().add(-5, 'days');
+    const oldDate = dayjs().add(-5, 'days');
     reports.forEach(async (report) => {
-      if (moment(report.createdAt).isBefore(moment(oldDate))) {
+      if (dayjs(report.createdAt).isBefore(dayjs(oldDate))) {
         fs.rmSync(report.path);
         await Report.findByIdAndDelete(report._id);
         simpleLogger.info(infoMessage.FILE_DELETED);
