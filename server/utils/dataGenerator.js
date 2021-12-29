@@ -1,5 +1,5 @@
 const faker = require('faker');
-const moment = require('moment');
+const dayjs = require('dayjs');
 const Task = require('../Models/Tasks');
 
 function createEmployee() {
@@ -16,7 +16,7 @@ function createEmployee() {
 }
 
 async function createTask(employeeId) {
-  const deadline = moment(faker.date.soon()).format('YYYY-MM-DD')
+  const deadline = dayjs(faker.date.soon()).format('YYYY-MM-DD')
   const newTask = Task({
     name: faker.lorem.word(),
     deadline,

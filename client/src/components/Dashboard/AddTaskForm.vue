@@ -18,7 +18,7 @@
 
 <script>
 import api from "../../../api/employees";
-import moment from 'moment';
+import dayjs from 'dayjs';
 export default {
   name: "AddTaskForm",
   props: ['employeeId'],
@@ -38,7 +38,7 @@ export default {
       if(!this.error) {
         const task = { 
           name: this.task, 
-          deadline: moment(this.taskDate).format('YYYY-MM-DD'), 
+          deadline: dayjs(this.taskDate).format('YYYY-MM-DD'), 
           completed: false};
         api.createTask(this.employeeId, task)
           .then(() => { this.$emit("taskAdded"); })

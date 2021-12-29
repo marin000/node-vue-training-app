@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import moment from "moment";
+import dayjs from "dayjs";
 import api from "../../api/items";
 
 export default {
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     formatDate(value) {
-      return moment(value).format("ddd MMM DD, YYYY [at] HH:mm a");
+      return dayjs(value).format("ddd MMM DD, YYYY [at] HH:mm a");
     },
   },
 };
