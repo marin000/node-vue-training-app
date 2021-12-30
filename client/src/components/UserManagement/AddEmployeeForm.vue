@@ -2,7 +2,12 @@
   <form @submit.prevent="addEmployee" class="employee-form">
     <div class="employee-input">
       <va-input class="mb-4" v-model="name" label="name" />
-      <div class="input-employee-error" v-if="error">{{ error }}</div>
+      <div class="input-employee-error" v-if="errorName">{{ errorName }}</div>
+      <va-input class="mb-4" v-model="email" label="email" />
+      <div class="input-employee-error" v-if="errorEmail">{{ errorEmail }}</div>
+      <va-input class="mb-4" v-model="phone" label="phone" />
+      <va-input class="mb-4" v-model="age" label="age" />
+      <va-input class="mb-4" v-model="pet" label="pet" />
     </div>
     <div class="employee-button">
       <va-button type="submit"> Add new user </va-button>
@@ -19,18 +24,34 @@ export default {
   data() {
     return {
       name: "",
-      error: "",
+      email: "",
+      phone: "",
+      age: "",
+      pet: "",
+      errorName: "",
+      errorEmail: "",
     };
   },
   methods: {
     addEmployee() {
-      this.error = this.name.length ? "" : "Please input employee name!";
+      this.errorName = this.name.length ? "" : "Please input employee name!";
+      this.errorEmail = this.email.length ? "" : "Please input email!";
       if (!this.error) {
-        api.addNewEmployee({ name: this.name })
-          .then(() => {this.$emit("employeeAdded"); })
-          .catch((err) => console.log(err));
+        api.addNewEmployee({
+            name: this.name,
+            email: this.email,
+            phone: this.phone,
+            age: this.age,
+            pet: this.pet
+          }).then(() => {
+            this.$emit("employeeAdded");
+          }).catch((err) => console.log(err));
       }
       this.name = "";
+      this.email = "";
+      this.phone = "";
+      this.age = "";
+      this.pet = "";
     },
   },
 };
@@ -39,7 +60,8 @@ export default {
 <style>
 .employee-form {
   display: flex;
-  justify-content: center;
+  justify-content: left;
+  margin-left: 15%;
 }
 
 .employee-input {
