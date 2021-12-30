@@ -4,6 +4,7 @@ const wkhtmltopdf = require('wkhtmltopdf');
 const { reportLogger, simpleLogger } = require('../logger/logger');
 const emailService = require('../service/email');
 const Report = require('../Models/Reports');
+const report = require('../constants/report');
 
 async function generateReport({ data, template, reportDir, pdfName }) {
   if (!fs.existsSync(reportDir)) {
@@ -29,7 +30,8 @@ async function generateReport({ data, template, reportDir, pdfName }) {
         });
       }
     });
-  const newReport = Report({ name: pdfName, employeeId: data.employee._id });
+  const reportPath = `${report.REPORTS_PATH}/${data.employee._id}/${pdfName}`;
+  const newReport = Report({ path: reportPath });
   await newReport.save();
 }
 
