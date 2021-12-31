@@ -13,7 +13,7 @@
         id="image"
         name="image"
         placeholder="Choose an image" 
-        ref="file"
+        ref="image"
         type="file">
     </div>
     <div class="employee-button">
@@ -74,7 +74,8 @@ export default {
       this.phone = "";
       this.age = "";
       this.pet = "";
-      this.image = null;
+      this.$refs.image.value = null;
+
     },
   },
 };
