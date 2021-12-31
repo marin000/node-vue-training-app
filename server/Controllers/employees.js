@@ -6,6 +6,7 @@ const infoMessage = require('../constants/infoMessages');
 const emailService = require('../service/email');
 const fs = require('fs');
 const report = require('../constants/report');
+const cloudinary = require("cloudinary").v2;
 
 function deleteEmployeeDir(employeeId) {
   const options = { recursive: true, force: true };
@@ -21,7 +22,16 @@ async function create(req, res, next) {
       res.status(403).json({ errors: errors.array() });
       return;
     }
-    const newEmployee = Employee(req.body);
+    const { name, email, phone, age, pet, image } = req.body;
+    const newEmployee = Employee({ name, email, phone, age, pet });
+    await cloudinary.uploader.upload(image, function (error, result) {
+      if (error) {
+        employeeLogger.error(errors);
+        emailService.sendEmail({ emailMessage: error });
+        return;
+      }
+      newEmployee.image = result.url;
+    });
     await newEmployee.save();
     employeeLogger.info(infoMessage.NEW_EMPLOYEE);
     res.status(201).send(newEmployee);
@@ -100,7 +110,7 @@ async function deleteTask(req, res) {
     const employee = await Employee.findById(task.employee);
     const index = employee.tasks.indexOf(task._id);
     employee.tasks.splice(index, 1);
-    await Employee.findByIdAndUpdate( employee._id, { tasks: employee.tasks });
+    await Employee.findByIdAndUpdate(employee._id, { tasks: employee.tasks });
     await Task.findByIdAndDelete(task._id);
     taskLogger.info(infoMessage.DELETE_TASK);
     res.status(204).send();

@@ -8,11 +8,18 @@
       <va-input class="mb-4" v-model="phone" label="phone" />
       <va-input class="mb-4" v-model="age" label="age" />
       <va-input class="mb-4" v-model="pet" label="pet" />
+      <input 
+        @change="onFileChange" 
+        id="image"
+        name="image"
+        placeholder="Choose an image" 
+        ref="file"
+        type="file">
     </div>
     <div class="employee-button">
       <va-button type="submit"> Add new user </va-button>
     </div>
-  </form>
+  </form><br><br>
 </template>
 
 <script>
@@ -30,20 +37,35 @@ export default {
       pet: "",
       errorName: "",
       errorEmail: "",
+      image: ""
     };
   },
   methods: {
+    onFileChange(e) {
+      const image = e.target.files || e.dataTransfer.files;
+      if (!image.length)
+          return;
+    const reader = new FileReader()
+    reader.onload = function() {
+        this.image = reader.result;
+    }.bind(this);
+    reader.readAsDataURL(image[0]);
+    },
+
     addEmployee() {
       this.errorName = this.name.length ? "" : "Please input employee name!";
       this.errorEmail = this.email.length ? "" : "Please input email!";
       if (!this.error) {
-        api.addNewEmployee({
-            name: this.name,
-            email: this.email,
-            phone: this.phone,
-            age: this.age,
-            pet: this.pet
-          }).then(() => {
+        const employee = {
+          name: this.name,
+          email: this.email,
+          phone: this.phone,
+          age: this.age,
+          pet: this.pet,
+          image: this.image
+        }
+        api.addNewEmployee(employee)
+        .then(() => {
             this.$emit("employeeAdded");
           }).catch((err) => console.log(err));
       }
@@ -52,6 +74,7 @@ export default {
       this.phone = "";
       this.age = "";
       this.pet = "";
+      this.image = null;
     },
   },
 };
@@ -73,4 +96,5 @@ export default {
   color: red;
   font-weight: bold;
 }
+
 </style>

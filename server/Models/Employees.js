@@ -15,7 +15,8 @@ const EmployeesShema = new mongoose.Schema({
   phone: String,
   age: Number,
   pet: String,
-  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tasks' }] 
+  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tasks' }],
+  image: String
 
 }, {timestamps: true }
 );

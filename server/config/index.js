@@ -1,11 +1,15 @@
 require('dotenv').config();
 const errorMessages = require('../constants/errorMessages');
 
-if(!process.env.DB_URL){
+if (!process.env.DB_URL) {
   throw new Error(errorMessages.DB_URL_MISSING);
 }
-else if(!process.env.MAIL_RECIPIENT){
+else if (!process.env.MAIL_RECIPIENT) {
   throw new Error(errorMessages.RECEPIENT_MAIL_MISSING);
+}
+else if (!process.env.CLOUDINARY_NAME || !process.env.CLOUDINARY_KEY ||
+  !process.env.CLOUDINARY_SECRET) {
+  throw new Error(errorMessages.CLOUDINARY_CONFIG_MISSING);
 }
 const config = {
   port: process.env.PORT || 4101,
@@ -20,7 +24,10 @@ const config = {
     host: 'smtp.ethereal.email',
     port: 587,
     secure: false,
-  }
+  },
+  cloudinaryName: process.env.CLOUDINARY_NAME,
+  cloudinaryKey: process.env.CLOUDINARY_KEY,
+  cloudinarySecret: process.env.CLOUDINARY_SECRET
 };
 
 module.exports = config;
