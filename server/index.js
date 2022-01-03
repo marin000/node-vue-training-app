@@ -30,7 +30,7 @@ const port = config.port;
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 app.use(cors());
 const router = require('./router');
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 app.use(router);
 app.use(express.static(__dirname + '/reportTemplate'));
 /**

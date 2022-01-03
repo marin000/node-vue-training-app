@@ -7,6 +7,7 @@ const emailService = require('../service/email');
 const fs = require('fs');
 const report = require('../constants/report');
 const cloudinary = require("cloudinary").v2;
+const { maxWidth, maxHeight} = require('../constants/cloudinary');
 
 function deleteEmployeeDir(employeeId) {
   const options = { recursive: true, force: true };
@@ -24,14 +25,18 @@ async function create(req, res, next) {
     }
     const { name, email, phone, age, pet, image } = req.body;
     const newEmployee = Employee({ name, email, phone, age, pet });
-    await cloudinary.uploader.upload(image, function (error, result) {
-      if (error) {
-        employeeLogger.error(errors);
-        emailService.sendEmail({ emailMessage: error });
-        return;
-      }
-      newEmployee.image = result.url;
-    });
+    if (image) {
+      await cloudinary.uploader.upload(image,
+        { width: maxWidth, height: maxHeight, crop: "crop" },
+        function (error, result) {
+          if (error) {
+            employeeLogger.error(errors);
+            emailService.sendEmail({ emailMessage: error });
+            return;
+          }
+          newEmployee.image = result.url;
+        });
+    }
     await newEmployee.save();
     employeeLogger.info(infoMessage.NEW_EMPLOYEE);
     res.status(201).send(newEmployee);

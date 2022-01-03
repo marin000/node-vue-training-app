@@ -8,18 +8,20 @@
       <va-input class="mb-4" v-model="phone" label="phone" />
       <va-input class="mb-4" v-model="age" label="age" />
       <va-input class="mb-4" v-model="pet" label="pet" />
-      <input 
-        @change="onFileChange" 
+      <input
+        @change="onFileChange"
         id="image"
         name="image"
-        placeholder="Choose an image" 
+        placeholder="Choose an image"
         ref="image"
-        type="file">
+        type="file"
+      />
     </div>
     <div class="employee-button">
       <va-button type="submit"> Add new user </va-button>
     </div>
-  </form><br><br>
+  </form>
+  <br /><br />
 </template>
 
 <script>
@@ -37,19 +39,18 @@ export default {
       pet: "",
       errorName: "",
       errorEmail: "",
-      image: ""
+      image: "",
     };
   },
   methods: {
     onFileChange(e) {
       const image = e.target.files || e.dataTransfer.files;
-      if (!image.length)
-          return;
-    const reader = new FileReader()
-    reader.onload = function() {
+      if (!image.length) return;
+      const reader = new FileReader();
+      reader.onload = function () {
         this.image = reader.result;
-    }.bind(this);
-    reader.readAsDataURL(image[0]);
+      }.bind(this);
+      reader.readAsDataURL(image[0]);
     },
 
     addEmployee() {
@@ -62,12 +63,13 @@ export default {
           phone: this.phone,
           age: this.age,
           pet: this.pet,
-          image: this.image
-        }
+          image: this.image,
+        };
         api.addNewEmployee(employee)
-        .then(() => {
+          .then(() => {
             this.$emit("employeeAdded");
-          }).catch((err) => console.log(err));
+          })
+          .catch((err) => console.log(err));
       }
       this.name = "";
       this.email = "";
@@ -75,7 +77,6 @@ export default {
       this.age = "";
       this.pet = "";
       this.$refs.image.value = null;
-
     },
   },
 };
@@ -97,5 +98,4 @@ export default {
   color: red;
   font-weight: bold;
 }
-
 </style>

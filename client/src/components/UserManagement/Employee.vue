@@ -9,7 +9,10 @@
       </thead>
       <tbody>
         <tr v-for="employee in employees" :key="employee._id">
-          <td>{{ employee.name }}</td>
+          <td>
+            {{ employee.name }}
+            <img v-if="employee.image" :src="employee.image" alt="profile img">
+          </td>
           <td>
             <va-button
               @click="deleteEmployee(employee._id)"
