@@ -11,7 +11,7 @@
         <tr v-for="employee in employees" :key="employee._id">
           <td>
             {{ employee.name }}
-            <img v-if="employee.image" :src="employee.image" alt="profile img">
+            <div v-if="employee.image" v-html="employee.image"></div>
           </td>
           <td>
             <va-button

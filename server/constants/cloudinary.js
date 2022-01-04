@@ -1,4 +1,5 @@
 module.exports = {
-  maxWidth: 1920,
-  maxHeight: 1080
+  imgUploadOptions: { width: 1920, height: 1080, crop: "crop" },
+  getImgOptions: {height: 100, radius: "max", width: 100, crop: "thumb",
+   quality: "auto"}
 }
