@@ -14,41 +14,45 @@ const cronSchedule = require('../constants/cronjob');
 const fs = require('fs');
 const Report = require('../Models/Reports');
 
-function sendReport() {
-  cron.schedule(cronSchedule.DAILY_3AM, async () => {
-    const employees = await Employee.find().populate('tasks');
-    const yesterday = dayjs().add(-1, 'day').format('YYYY-MM-DD');
+async function sendMailReport() {
+  const employees = await Employee.find().populate('tasks');
+  const yesterday = dayjs().add(-1, 'day').format('YYYY-MM-DD');
 
-    employees.forEach(employee => {
-      const yesterdayTasks = [];
-      employee.tasks.forEach(task => {
-        const taskDate = dayjs(task.updatedAt).format('YYYY-MM-DD');
-        if (dayjs(yesterday).isSame(taskDate)) {
-          yesterdayTasks.push(task);
-        }
-      });
-      const { tempContext, employeeReportDir, pdfName } =
-        taskHelper.createTaskReportData(employee, yesterdayTasks, yesterday);
-
-      const options = {
-        data: tempContext,
-        template: report.TASKS_TEMPLATE,
-        reportDir: employeeReportDir,
-        pdfName
-      };
-      reportService.generateReport(options);
-      const reportPath = (path.join(__dirname,
-        `../.${employeeReportDir}/${pdfName}`));
-      const emailData = {
-        emailMessage: CRONJOB_MESSAGE,
-        emailSubject: CRONJOB_SUBJECT + yesterday,
-        attachmentName: pdfName,
-        attachmentPath: reportPath
-      };
-      emailService.sendEmail(emailData);
+  employees.forEach(employee => {
+    const yesterdayTasks = [];
+    employee.tasks.forEach(task => {
+      const taskDate = dayjs(task.updatedAt).format('YYYY-MM-DD');
+      if (dayjs(yesterday).isSame(taskDate)) {
+        yesterdayTasks.push(task);
+      }
     });
-    simpleLogger.info(infoMessage.CRONJOB_SEND_REPORTS);
+      const reportData = taskHelper.createTaskReportData(
+        employee, yesterdayTasks, yesterday);
+      const { tempContext, employeeReportDir, pdfName } = reportData;
+
+    const options = {
+      data: tempContext,
+      template: report.TASKS_TEMPLATE,
+      reportDir: employeeReportDir,
+      pdfName
+    };
+    reportService.generateReport(options);
+    const reportPath = (path.join(__dirname,
+      `../.${employeeReportDir}/${pdfName}`));
+    const emailData = {
+      emailMessage: CRONJOB_MESSAGE,
+      emailSubject: CRONJOB_SUBJECT + yesterday,
+      attachmentName: pdfName,
+      attachmentPath: reportPath
+    };
+    emailService.sendEmail(emailData);
   });
+  simpleLogger.info(infoMessage.CRONJOB_SEND_REPORTS);
+
+}
+
+function sendReport() {
+  cron.schedule(cronSchedule.DAILY_3AM, sendMailReport);
 }
 
 function deleteReport() {
