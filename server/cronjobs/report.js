@@ -26,9 +26,9 @@ async function sendMailReport() {
         yesterdayTasks.push(task);
       }
     });
-      const reportData = taskHelper.createTaskReportData(
-        employee, yesterdayTasks, yesterday);
-      const { tempContext, employeeReportDir, pdfName } = reportData;
+    const reportData = taskHelper.createTaskReportData(
+      employee, yesterdayTasks, yesterday);
+    const { tempContext, employeeReportDir, pdfName } = reportData;
 
     const options = {
       data: tempContext,
@@ -48,7 +48,6 @@ async function sendMailReport() {
     emailService.sendEmail(emailData);
   });
   simpleLogger.info(infoMessage.CRONJOB_SEND_REPORTS);
-
 }
 
 function sendReport() {
