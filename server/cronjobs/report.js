@@ -18,7 +18,7 @@ async function sendMailReport() {
   const employees = await Employee.find().populate('tasks');
   const yesterday = dayjs().add(-1, 'day').format('YYYY-MM-DD');
 
-  employees.forEach(employee => {
+  employees.forEach(async(employee) => {
     const yesterdayTasks = [];
     employee.tasks.forEach(task => {
       const taskDate = dayjs(task.updatedAt).format('YYYY-MM-DD');
@@ -36,7 +36,7 @@ async function sendMailReport() {
       reportDir: employeeReportDir,
       pdfName
     };
-    reportService.generateReport(options);
+    await reportService.generateReport(options);
     const reportPath = (path.join(__dirname,
       `../.${employeeReportDir}/${pdfName}`));
     const emailData = {
