@@ -5,7 +5,7 @@ const { simpleLogger } = require('../logger/logger');
 const Report = require('../Models/Reports');
 const report = require('../constants/report');
 
-function exportHtml(html, filePath) {
+function createPdf(html, filePath) {
   return new Promise((resolve, reject) => {
     wkhtmltopdf(html, { output: filePath, pageSize: 'a4' }, (err) => {
       if (err) {
@@ -23,7 +23,7 @@ async function generateReport({ data, template, reportDir, pdfName }) {
   }
   const filePath = `${reportDir}/${pdfName}`;
   const html = await ejs.renderFile(template, data, { async: true });
-  await exportHtml(html, filePath);
+  await createPdf(html, filePath);
   const reportPath = `${report.REPORTS_PATH}/${data.employee._id}/${pdfName}`;
   const newReport = Report({ path: reportPath });
   await newReport.save();
