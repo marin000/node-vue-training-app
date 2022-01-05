@@ -21,7 +21,6 @@
       <va-button type="submit"> Add new user </va-button>
     </div>
   </form>
-  <br /><br />
 </template>
 
 <script>
