@@ -1,10 +1,10 @@
-const fs = require('fs');
 const ejs = require('ejs');
-const wkhtmltopdf = require('wkhtmltopdf');
-const { simpleLogger } = require('../logger/logger');
+const fs = require('fs');
+const Promise = require('bluebird');
 const Report = require('../Models/Reports');
 const report = require('../constants/report');
-const Promise = require('bluebird');
+const { simpleLogger } = require('../logger/logger');
+const wkhtmltopdf = Promise.promisify(require('wkhtmltopdf'));
 
 async function generateReport({ data, template, reportDir, pdfName }) {
   if (!fs.existsSync(reportDir)) {
@@ -12,8 +12,7 @@ async function generateReport({ data, template, reportDir, pdfName }) {
   }
   const filePath = `${reportDir}/${pdfName}`;
   const html = await ejs.renderFile(template, data, { async: true });
-  const createPdf = Promise.promisify(wkhtmltopdf);
-  await createPdf(html, { output: filePath, pageSize: 'a4' });
+  await wkhtmltopdf(html, { output: filePath, pageSize: 'a4' });
   const reportPath = `${report.REPORTS_PATH}/${data.employee._id}/${pdfName}`;
   const newReport = Report({ path: reportPath });
   await newReport.save();
