@@ -5,11 +5,13 @@ const emailDefault = require('../constants/email');
 const errorMessages = require('../constants/errorMessages');
 const infoMessages = require('../constants/infoMessages');
 
-async function sendEmail( { emailMessage,
-  emailSubject = emailDefault.DEFAULT_EMAIL_SUBJECT,
-  attachmentName = null,
-  attachmentPath = null,
-  recipientAddress = config.mailRecipient }) {
+async function sendEmail(options) { 
+  const { 
+    emailMessage,
+    emailSubject = emailDefault.DEFAULT_EMAIL_SUBJECT,
+    attachmentName = null,
+    attachmentPath = null,
+    recipientAddress = config.mailRecipient } = options 
 
   const testAccount = await nodemailer.createTestAccount();
   const { user, pass } = testAccount;
