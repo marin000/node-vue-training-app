@@ -72,6 +72,7 @@ export default {
       this.employee.age = '';
       this.employee.pet = '';
       this.$refs.image.value = null;
+      this.employee.image = null;
     }
   },
 };
