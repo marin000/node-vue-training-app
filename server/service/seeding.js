@@ -1,5 +1,4 @@
 const Employee = require('../Models/Employees');
-const Task = require('../Models/Tasks');
 const { simpleLogger } = require('../logger/logger');
 const infoMessages = require('../constants/infoMessages');
 const randNumber = require('../utils/getRandomNumber');
@@ -18,15 +17,12 @@ async function seedEmployees() {
 
 async function seedTasks() {
   const employeesIds = await Employee.find().distinct('_id');
-  const tasks = [];
   employeesIds.forEach(employeeId => {
     const randTaskNum = randNumber.getRandomNumber(TASKS_MIN, TASKS_MAX);
     for (let i = 0; i < randTaskNum; i++) {
-      const newTask = dataGenerator.createTask(employeeId);
-      tasks.push(newTask);
+      dataGenerator.createTask(employeeId);
     }
   });
-  await Task.insertMany(tasks);
   simpleLogger.info(infoMessages.TASKS_FILLED);
 }
 module.exports = { seedEmployees, seedTasks }

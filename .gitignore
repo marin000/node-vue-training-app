@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
 /dist
-
+*.pdf
 
 # local env files
 .env.local
@@ -13,7 +13,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 *.log
-*.pdf
 
 # Editor directories and files
 .idea

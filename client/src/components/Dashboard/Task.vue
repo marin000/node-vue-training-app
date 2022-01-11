@@ -55,7 +55,7 @@
 
 <script>
 import api from "../../../api/employees";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export default {
   name: "Task",
@@ -78,7 +78,7 @@ export default {
         .catch((err) => (this.err = err));
     },
     formatDate(value) {
-      return moment(value).format("YYYY-MM-DD");
+      return dayjs(value).format("YYYY-MM-DD");
     },
     deleteTask(taskId) {
       api.deleteTask(this.employeeId, taskId)
@@ -95,8 +95,8 @@ export default {
         .catch((err) => console.log(err));
     },
     isExpired(deadline) {
-      const today = moment().format('YYYY-MM-DD');
-      return moment(today).isAfter(deadline);
+      const today = dayjs().format('YYYY-MM-DD');
+      return dayjs(today).isAfter(deadline);
     },
   },
   computed: {

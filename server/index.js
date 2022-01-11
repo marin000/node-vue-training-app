@@ -13,6 +13,7 @@ const emailService = require('./service/email');
 const config = require('./config/index');
 const seedingService= require('./dbSeeding/automatic');
 const dbMessages = require('./constants/dbMessages');
+const cronjob = require('./cronjobs/report');
 require('dotenv').config()
 
 const specs = swaggerJsDoc(swaggerOptions.options);
@@ -42,7 +43,7 @@ mongoose.connect(config.dbUrl, connectionParams)
   .catch((err) => {
     console.error(ERROR_CONNECTING + `\n${err}`);
     dbConnectionLogger.error(ERROR_CONNECTING  + `\n${err}`);
-    emailService.sendEmail(ERROR_CONNECTING + `\n${err}`);
+    emailService.sendEmail({ emailMessage: ERROR_CONNECTING + `\n${err}` });
   })
 
 /**
@@ -50,4 +51,6 @@ mongoose.connect(config.dbUrl, connectionParams)
  */
 app.listen(port, () => {
   console.log(`Listening to requests on http://localhost:${port}`);
+  cronjob.sendReport();
+  cronjob.deleteReport();
 });

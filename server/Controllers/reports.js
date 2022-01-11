@@ -5,6 +5,7 @@ const { validationResult } = require('express-validator');
 const emailService = require('../service/email');
 const infoMessage = require('../constants/infoMessages');
 const reportService = require('../service/report');
+const taskHelper = require('../utils/taskReportHelper');
 const { reportLogger } = require('../logger/logger');
 const path = require('path');
 
@@ -13,7 +14,7 @@ async function createEmployeeReport(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       reportLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -40,14 +41,18 @@ async function createEmployeeReport(req, res) {
         expired: tasksExpired.length
       }
     };
-
-    await reportService.generateReport(data, report.EMPLOYEE_TEMPLATE, 
-      employeeReportDir, pdfName);
+    const options = {
+      data,
+      template: report.EMPLOYEE_TEMPLATE,
+      reportDir: employeeReportDir,
+      pdfName
+    };
+    await reportService.generateReport(options);
     reportLogger.info(infoMessage.NEW_REPORT);
     res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));
   } catch (error) {
     reportLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     res.status(500).send(error.message);
   }
 }
@@ -57,7 +62,7 @@ async function createTasksReport(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       reportLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -70,22 +75,21 @@ async function createTasksReport(req, res) {
       updatedAt: { $gte: new Date(date), $lte: tommorow }
     });
 
-    const pdfName = employee.name.replace(' ', '-')
-      .toLowerCase() + `-${date}.pdf`;
-    const employeeReportDir = `${report.REPORTS_PATH}/${employee._id}`;
-    const data = {
-      employee,
-      tasks,
-      date
-    };
+    const { tempContext, employeeReportDir, pdfName} = 
+      taskHelper.createTaskReportData(employee, tasks, date);
 
-    await reportService.generateReport(data, report.TASKS_TEMPLATE, 
-      employeeReportDir, pdfName);
+    const options = {
+      data: tempContext,
+      template: report.TASKS_TEMPLATE,
+      reportDir: employeeReportDir,
+      pdfName
+    };
+    await reportService.generateReport(options);
     reportLogger.info(infoMessage.NEW_REPORT);
     res.json(path.join(__dirname, `../.${employeeReportDir}/${pdfName}`));
   } catch (error) {
     reportLogger.error(error.message, { metadata: error.stack });
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     res.status(500).send(error.message);
   }
 }

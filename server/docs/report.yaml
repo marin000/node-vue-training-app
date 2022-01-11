@@ -1,0 +1,63 @@
+tags:
+  name: Reports
+  description: To-do app API reports
+
+paths:
+  /report/employee:
+    post:
+      summary: Create employee report
+      tags: [Reports]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 'ad6a8sd5a8s5d68asd'
+      responses:
+        403:
+          description: Request body is not valid
+          content:
+            application/json:
+              schema:
+                type: object
+        500:
+          description: Error getting logs.
+          content:
+            text/plain:
+              schema:
+                type: string
+    
+  /report/employee/tasks:
+    post:
+      summary: Create tasks report
+      tags: [Reports]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 'das67d587as6d7a8s'
+                date:
+                  type: string
+                  example: '2021-12-21'
+      responses:
+        403:
+          description: Request body is not valid
+          content:
+            application/json:
+              schema:
+                type: object
+        500:
+          description: Error getting logs.
+          content:
+            text/plain:
+              schema:
+                type: string

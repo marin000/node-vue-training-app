@@ -9,7 +9,7 @@ async function getLogs(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       logsLogger.error(errors);
-      emailService.sendEmail(JSON.stringify(errors.array()));
+      emailService.sendEmail({ emailMessage: JSON.stringify(errors.array()) });
       res.status(403).json({ errors: errors.array() });
       return;
     }
@@ -28,7 +28,7 @@ async function getLogs(req, res) {
     res.json(data);
   } catch (error) {
     logsLogger.error(error.message);
-    emailService.sendEmail(error.message);
+    emailService.sendEmail({ emailMessage: error.message });
     res.status(500).send(error.message);
   }
 }

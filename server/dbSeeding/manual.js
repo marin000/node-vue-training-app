@@ -19,7 +19,7 @@ mongoose.connect(config.dbUrl, connectionParams)
   .catch((err) => {
     console.error(ERROR_CONNECTING + `\n${err}`);
     dbConnectionLogger.error(ERROR_CONNECTING + `\n${err}`);
-    emailService.sendEmail(ERROR_CONNECTING + `\n${err}`);
+    emailService.sendEmail({ emailMessage: ERROR_CONNECTING + `\n${err}` });
   })
 
 async function closeMongoConnection() {
