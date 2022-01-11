@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const cloudinary = require('cloudinary').v2;
-const { getImgOptions } = require('../constants/cloudinary');
+const { imgOptions } = require('../constants/cloudinary');
 
 const EmployeesShema = new mongoose.Schema({
   name: {
@@ -22,12 +22,12 @@ const EmployeesShema = new mongoose.Schema({
     type: String,
     get: transformImg
   }
-}, {timestamps: true, toJSON: { getters: true }}
+}, { timestamps: true, toJSON: { getters: true } }
 );
 
 function transformImg(image) {
   if (image) {
-    return cloudinary.image(image, getImgOptions);
+    return cloudinary.image(image, imgOptions);
   }
 }
 

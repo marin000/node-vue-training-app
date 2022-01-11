@@ -30,7 +30,9 @@ async function create(req, res, next) {
     }
     const { name, email, phone, age, pet, image } = req.body;
     const newEmployee = Employee({ name, email, phone, age, pet });
-    if (image) { newEmployee.image = await uploadImage(image); }
+    if (image) { 
+      newEmployee.image = await uploadImage(image); 
+    }
     await newEmployee.save();
     employeeLogger.info(infoMessage.NEW_EMPLOYEE);
     res.status(201).send(newEmployee);
