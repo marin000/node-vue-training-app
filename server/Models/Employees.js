@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require('cloudinary').v2;
 const { getImgOptions } = require('../constants/cloudinary');
 
 const EmployeesShema = new mongoose.Schema({
@@ -26,7 +26,7 @@ const EmployeesShema = new mongoose.Schema({
 );
 
 function transformImg(image) {
-  if(image) {
+  if (image) {
     return cloudinary.image(image, getImgOptions);
   }
 }

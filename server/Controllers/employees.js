@@ -6,7 +6,7 @@ const infoMessage = require('../constants/infoMessages');
 const emailService = require('../service/email');
 const fs = require('fs');
 const report = require('../constants/report');
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require('cloudinary').v2;
 const { uploadImgOptions } = require('../constants/cloudinary');
 
 function deleteEmployeeDir(employeeId) {
@@ -15,14 +15,7 @@ function deleteEmployeeDir(employeeId) {
 }
 
 async function uploadImage(image) {
-  const result = await cloudinary.uploader.upload(image, uploadImgOptions,
-    function (error) {
-      if (error) {
-        employeeLogger.error(error);
-        emailService.sendEmail({ emailMessage: error });
-        return;
-      }
-    });
+  const result = await cloudinary.uploader.upload(image, uploadImgOptions);
   return result.public_id;
 }
 
@@ -37,9 +30,7 @@ async function create(req, res, next) {
     }
     const { name, email, phone, age, pet, image } = req.body;
     const newEmployee = Employee({ name, email, phone, age, pet });
-    if (image) {
-      newEmployee.image = await uploadImage(image);
-    }
+    if (image) { newEmployee.image = await uploadImage(image); }
     await newEmployee.save();
     employeeLogger.info(infoMessage.NEW_EMPLOYEE);
     res.status(201).send(newEmployee);

@@ -9,7 +9,7 @@
       <va-input class="mb-4" v-model="age" label="age" />
       <va-input class="mb-4" v-model="pet" label="pet" />
       <input
-        @change="onFileChange"
+        @change="readImgDataUrl"
         id="image"
         name="image"
         placeholder="Choose an image"
@@ -31,18 +31,18 @@ export default {
 
   data() {
     return {
-      name: "",
-      email: "",
-      phone: "",
-      age: "",
-      pet: "",
-      errorName: "",
-      errorEmail: "",
-      image: "",
+      name: '',
+      email: '',
+      phone: '',
+      age: '',
+      pet: '',
+      errorName: '',
+      errorEmail: '',
+      image: '',
     };
   },
   methods: {
-    onFileChange(e) {
+    readImgDataUrl(e) {
       const image = e.target.files || e.dataTransfer.files;
       if (!image.length) return;
       const reader = new FileReader();
@@ -51,10 +51,9 @@ export default {
       }.bind(this);
       reader.readAsDataURL(image[0]);
     },
-
     addEmployee() {
-      this.errorName = this.name.length ? "" : "Please input employee name!";
-      this.errorEmail = this.email.length ? "" : "Please input email!";
+      this.errorName = this.name.length ? '' : 'Please input employee name!';
+      this.errorEmail = this.email.length ? '' : 'Please input email!';
       if (!this.error) {
         const employee = {
           name: this.name,
@@ -65,18 +64,19 @@ export default {
           image: this.image,
         };
         api.addNewEmployee(employee)
-          .then(() => {
-            this.$emit("employeeAdded");
-          })
+          .then(() => { this.$emit('employeeAdded'); })
           .catch((err) => console.log(err));
       }
-      this.name = "";
-      this.email = "";
-      this.phone = "";
-      this.age = "";
-      this.pet = "";
-      this.$refs.image.value = null;
+      this.resetForm();
     },
+    resetForm() {
+      this.name = '';
+      this.email = '';
+      this.phone = '';
+      this.age = '';
+      this.pet = '';
+      this.$refs.image.value = null;
+    }
   },
 };
 </script>
