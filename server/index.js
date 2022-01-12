@@ -14,16 +14,23 @@ const config = require('./config/index');
 const seedingService= require('./dbSeeding/automatic');
 const dbMessages = require('./constants/dbMessages');
 const cronjob = require('./cronjobs/report');
+const cloudinary = require('cloudinary').v2;
 require('dotenv').config()
 
 const specs = swaggerJsDoc(swaggerOptions.options);
+
+cloudinary.config({
+  cloud_name: config.cloudinaryName,
+  api_key: config.cloudinaryKey,
+  api_secret: config.cloudinarySecret
+});
 
 const app = express();
 const port = config.port;
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 app.use(cors());
 const router = require('./router');
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 app.use(router);
 app.use(express.static(__dirname + '/reportTemplate'));
 /**

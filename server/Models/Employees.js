@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const cloudinary = require('cloudinary').v2;
+const { imgOptions } = require('../constants/cloudinary');
 
 const EmployeesShema = new mongoose.Schema({
   name: {
@@ -15,9 +17,18 @@ const EmployeesShema = new mongoose.Schema({
   phone: String,
   age: Number,
   pet: String,
-  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tasks' }] 
-
-}, {timestamps: true }
+  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tasks' }],
+  image: {
+    type: String,
+    get: transformImg
+  }
+}, { timestamps: true, toJSON: { getters: true } }
 );
+
+function transformImg(image) {
+  if (image) {
+    return cloudinary.image(image, imgOptions);
+  }
+}
 
 module.exports = mongoose.model('Employees', EmployeesShema); 

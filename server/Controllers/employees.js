@@ -6,10 +6,17 @@ const infoMessage = require('../constants/infoMessages');
 const emailService = require('../service/email');
 const fs = require('fs');
 const report = require('../constants/report');
+const cloudinary = require('cloudinary').v2;
+const { uploadImgOptions } = require('../constants/cloudinary');
 
 function deleteEmployeeDir(employeeId) {
   const options = { recursive: true, force: true };
   fs.rmSync(`${report.REPORTS_PATH}/${employeeId}`, options);
+}
+
+async function uploadImage(image) {
+  const result = await cloudinary.uploader.upload(image, uploadImgOptions);
+  return result.public_id;
 }
 
 async function create(req, res, next) {
@@ -21,7 +28,11 @@ async function create(req, res, next) {
       res.status(403).json({ errors: errors.array() });
       return;
     }
-    const newEmployee = Employee(req.body);
+    const { name, email, phone, age, pet, image } = req.body;
+    const newEmployee = Employee({ name, email, phone, age, pet });
+    if (image) { 
+      newEmployee.image = await uploadImage(image); 
+    }
     await newEmployee.save();
     employeeLogger.info(infoMessage.NEW_EMPLOYEE);
     res.status(201).send(newEmployee);
@@ -100,7 +111,7 @@ async function deleteTask(req, res) {
     const employee = await Employee.findById(task.employee);
     const index = employee.tasks.indexOf(task._id);
     employee.tasks.splice(index, 1);
-    await Employee.findByIdAndUpdate( employee._id, { tasks: employee.tasks });
+    await Employee.findByIdAndUpdate(employee._id, { tasks: employee.tasks });
     await Task.findByIdAndDelete(task._id);
     taskLogger.info(infoMessage.DELETE_TASK);
     res.status(204).send();
